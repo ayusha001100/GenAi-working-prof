@@ -41,7 +41,7 @@ export default function AdminDashboard() {
                         <ArrowLeft size={24} />
                     </button>
                     <img src="/logo.png" alt="Logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
-                    <h1 style={{ fontSize: '2rem', fontWeight: 800 }}>Admin Analytics</h1>
+                    <h1 style={{ fontSize: '1.5rem', fontWeight: 800 }}>LETSUPGRADE GEN AI <span style={{ color: 'var(--text-secondary)', fontWeight: 400, marginLeft: '0.5rem' }}>/ Admin</span></h1>
                 </div>
                 <ThemeToggle />
             </header>

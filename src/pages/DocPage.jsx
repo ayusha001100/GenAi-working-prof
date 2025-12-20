@@ -255,7 +255,7 @@ export default function DocPage({ day }) {
                     </button>
                     <img src="/logo.png" alt="Logo" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
                     <span style={{ fontWeight: 700, letterSpacing: '-0.02em' }}>
-                        GEN AI / {day === 'day1' ? 'Day 1' : 'Day 2'}
+                        LETSUPGRADE GEN AI / {day === 'day1' ? 'Day 1' : 'Day 2'}
                     </span>
                 </div>
                 <ThemeToggle />

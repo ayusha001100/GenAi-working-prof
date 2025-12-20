@@ -76,7 +76,7 @@ export default function Dashboard() {
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.03em' }}>
                     <img src="/logo.png" alt="Logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
-                    AI WORKSHOP
+                    LETSUPGRADE GEN AI
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     <ThemeToggle />
