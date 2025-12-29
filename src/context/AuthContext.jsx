@@ -1,14 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { auth, db } from '../firebase';
-import {
-    onAuthStateChanged,
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    signOut,
-    signInWithPopup,
-    GoogleAuthProvider
-} from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 
 const AuthContext = createContext(null);
@@ -18,58 +8,121 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [userData, setUserData] = useState(null);
 
-    const googleProvider = new GoogleAuthProvider();
-
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-            setUser(currentUser);
-            if (currentUser) {
-                // Fetch additional user data from Firestore (progress, etc.)
-                const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-                if (userDoc.exists()) {
-                    setUserData(userDoc.data());
-                } else {
-                    // Initialize user doc if it doesn't exist
-                    const initialData = {
-                        email: currentUser.email,
-                        name: currentUser.displayName || (currentUser.email ? currentUser.email.split('@')[0] : 'Legend'),
-                        progress: {
-                            completedSections: []
-                        },
-                        stats: {
-                            totalPoints: 0,
-                            totalCorrect: 0,
-                            totalIncorrect: 0
-                        },
-                        role: 'user'
-                    };
-                    await setDoc(doc(db, 'users', currentUser.uid), initialData);
-                    setUserData(initialData);
-                }
-            } else {
-                setUserData(null);
-            }
-            setLoading(false);
-        });
-
-        return () => unsubscribe();
+        // Load user from localStorage on mount
+        const storedUser = localStorage.getItem('user');
+        const storedUserData = localStorage.getItem('userData');
+        
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+        if (storedUserData) {
+            setUserData(JSON.parse(storedUserData));
+        }
+        setLoading(false);
     }, []);
 
     const login = (email, password) => {
-        return signInWithEmailAndPassword(auth, email, password);
+        // Mock login - create a user object
+        const mockUser = {
+            uid: `user_${Date.now()}`,
+            email: email,
+            displayName: email.split('@')[0],
+            metadata: {
+                creationTime: new Date().toISOString()
+            }
+        };
+        setUser(mockUser);
+        localStorage.setItem('user', JSON.stringify(mockUser));
+        
+        const initialData = {
+            email: email,
+            name: email.split('@')[0],
+            createdAt: new Date().toISOString(),
+            progress: {
+                completedSections: []
+            },
+            stats: {
+                totalPoints: 0,
+                totalCorrect: 0,
+                totalIncorrect: 0
+            },
+            role: 'user'
+        };
+        setUserData(initialData);
+        localStorage.setItem('userData', JSON.stringify(initialData));
+        
+        return Promise.resolve({ user: mockUser });
     };
 
     const signup = (email, password) => {
-        return createUserWithEmailAndPassword(auth, email, password);
+        // Mock signup - same as login
+        return login(email, password);
     };
 
     const loginWithGoogle = () => {
-        return signInWithPopup(auth, googleProvider);
+        // Mock Google login - create a user object
+        const mockUser = {
+            uid: `user_${Date.now()}`,
+            email: 'user@example.com',
+            displayName: 'User',
+            metadata: {
+                creationTime: new Date().toISOString()
+            }
+        };
+        setUser(mockUser);
+        localStorage.setItem('user', JSON.stringify(mockUser));
+        
+        const storedUserData = localStorage.getItem('userData');
+        if (!storedUserData) {
+            const initialData = {
+                email: 'user@example.com',
+                name: 'User',
+                createdAt: new Date().toISOString(),
+                progress: {
+                    completedSections: []
+                },
+                stats: {
+                    totalPoints: 0,
+                    totalCorrect: 0,
+                    totalIncorrect: 0
+                },
+                role: 'user'
+            };
+            setUserData(initialData);
+            localStorage.setItem('userData', JSON.stringify(initialData));
+        } else {
+            setUserData(JSON.parse(storedUserData));
+        }
+        
+        return Promise.resolve({ user: mockUser });
     };
 
     const logout = () => {
-        return signOut(auth);
-    }
+        setUser(null);
+        setUserData(null);
+        localStorage.removeItem('user');
+        localStorage.removeItem('userData');
+        return Promise.resolve();
+    };
+
+    const updateUserData = (newData) => {
+        // If newData is a function, use it to update state
+        // Otherwise, if it has progress/stats (full userData object), use it directly
+        // Otherwise merge with existing userData
+        let updatedData;
+        if (typeof newData === 'function') {
+            updatedData = newData(userData);
+        } else if (newData && (newData.progress || newData.stats)) {
+            // Full userData object provided
+            updatedData = newData;
+        } else {
+            // Partial update - merge
+            updatedData = { ...userData, ...newData };
+        }
+        setUserData(updatedData);
+        localStorage.setItem('userData', JSON.stringify(updatedData));
+    };
 
     const value = {
         user,
@@ -79,7 +132,7 @@ export const AuthProvider = ({ children }) => {
         signup,
         loginWithGoogle,
         logout,
-        setUserData
+        setUserData: updateUserData
     };
 
     return (

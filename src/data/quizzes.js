@@ -145,14 +145,14 @@ export const quizzes = {
         { question: "What is AI bad at?", options: ["Summarizing docs", "Generating ideas", "Exact calculations", "Rewriting content"], answer: 2 },
         { question: "Can AI handle confidential data safely by default?", options: ["Yes", "No", "Always", "Maybe"], answer: 1 },
         { question: "Is AI good at summarizing long documents?", options: ["Yes", "No", "Never", "Partially"], answer: 0 },
-        { question: "Which industry can use AI for JDs?", options: ["HR", "Finance", "Operations", "Sales"], answer: 0 }
+        { question: "Which capability is AI NOT good at?", options: ["Writing drafts", "Rewriting content", "Real-time information", "Generating ideas"], answer: 2 }
     ],
     "prompt-engineering": [
         { question: "What is a prompt?", options: ["A piece of hardware", "What you ask AI to do", "A type of computer code", "A loading screen"], answer: 1 },
-        { question: "Which is a 'Good Prompt' example?", options: ["'Write email'", "'Write a professional email asking manager for leave...'", "'Do work'", "'Hello'"], answer: 1 },
+        { question: "Which is a 'Good Prompt' example?", options: ["'Write email'", "'Write a professional email asking manager for leave, polite tone, short'", "'Do work'", "'Hello'"], answer: 1 },
         { question: "What is the first step in the Prompt Framework?", options: ["Output Format", "Task", "Role", "Constraints"], answer: 2 },
-        { question: "Prompt engineering is like giving instructions to:", "options": ["A senior partner", "A junior employee", "A robot", "A pet"], answer: 1 },
-        { question: "What does 'Constraints' mean in a prompt?", "options": ["Limitations like 'short' or 'polite'", "The price of the AI", "The internet speed", "The number of users"], answer: 0 }
+        { question: "Prompt engineering is like giving instructions to:", options: ["A senior partner", "A junior employee", "A robot", "A pet"], answer: 1 },
+        { question: "What does 'Constraints' mean in a prompt?", options: ["Limitations like 'short' or 'polite'", "The price of the AI", "The internet speed", "The number of users"], answer: 0 }
     ],
     "model-settings": [
         { question: "What does Temperature control?", options: ["The color of the UI", "Creativity level", "CPU heat", "Download speed"], answer: 1 },
@@ -173,7 +173,7 @@ export const quizzes = {
         { question: "Does AI follow truth or patterns?", options: ["Truth", "Patterns", "Both", "Neither"], answer: 1 },
         { question: "Who remains responsible for AI outputs?", options: ["The AI", "The CEO of OpenAI", "Humans", "The computer"], answer: 2 },
         { question: "AI will not replace you. Who will?", options: ["Robots", "People who understand AI", "No one", "Aliens"], answer: 1 },
-        { question: "What is the purpose of mini practice?", options: ["To waste time", "To build confidence", "To break the AI", "To learn to type"], answer: 1 }
+        { question: "What should you always do with AI outputs?", options: ["Trust them blindly", "Double-check important ones", "Delete them", "Share immediately"], answer: 1 }
     ],
     "intro-visual-genai": [
         { question: "What is Visual GenAI?", options: ["AI that only reads text", "AI that creates images/videos", "AI that monitors cameras", "AI that draws on paper"], answer: 1 },

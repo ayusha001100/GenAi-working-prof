@@ -1,36 +1,13 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Lock, Mail, Sparkles, LogIn, UserPlus } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
     const navigate = useNavigate();
-    const { login, signup, loginWithGoogle } = useAuth();
-    const [isLogin, setIsLogin] = useState(true);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const { loginWithGoogle } = useAuth();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setError('');
-
-        try {
-            if (isLogin) {
-                await login(email, password);
-            } else {
-                await signup(email, password);
-            }
-            navigate('/dashboard');
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleGoogleLogin = async () => {
         setLoading(true);
@@ -107,7 +84,7 @@ export default function Login() {
                     padding: '3rem 2.5rem',
                     boxShadow: '0 32px 64px -16px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255,255,255,0.02)'
                 }}>
-                    <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
                         <motion.div
                             whileHover={{ scale: 1.05, rotate: 5 }}
                             style={{
@@ -136,132 +113,75 @@ export default function Login() {
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent'
                         }}>
-                            {isLogin ? 'Welcome Back' : 'Create Account'}
+                            Welcome
                         </h2>
                         <p style={{ color: '#a1a1aa', fontSize: '0.9rem' }}>
-                            {isLogin ? 'Access the intelligent workspace.' : 'Join the next generation of AI learning.'}
+                            Access the intelligent workspace.
                         </p>
                     </div>
 
-                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        <div style={{ position: 'relative' }}>
-                            <Mail size={18} style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', color: '#71717a' }} />
-                            <input
-                                type="email"
-                                required
-                                placeholder="Email address"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                style={{
-                                    width: '100%',
-                                    padding: '16px 16px 16px 50px',
-                                    borderRadius: '14px',
-                                    background: 'rgba(0,0,0,0.2)',
-                                    border: '1px solid rgba(255,255,255,0.08)',
-                                    color: '#fff',
-                                    fontSize: '0.95rem',
-                                    outline: 'none'
-                                }}
-                            />
-                        </div>
-
-                        <div style={{ position: 'relative' }}>
-                            <Lock size={18} style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', color: '#71717a' }} />
-                            <input
-                                type="password"
-                                required
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                style={{
-                                    width: '100%',
-                                    padding: '16px 16px 16px 50px',
-                                    borderRadius: '14px',
-                                    background: 'rgba(0,0,0,0.2)',
-                                    border: '1px solid rgba(255,255,255,0.08)',
-                                    color: '#fff',
-                                    fontSize: '0.95rem',
-                                    outline: 'none'
-                                }}
-                            />
-                        </div>
-
-                        <AnimatePresence>
-                            {error && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    style={{ color: '#f87171', fontSize: '0.8rem', textAlign: 'center', background: 'rgba(248,113,113,0.1)', padding: '8px', borderRadius: '8px' }}
-                                >
-                                    {error}
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            disabled={loading}
-                            type="submit"
+                    {error && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
                             style={{
-                                width: '100%',
-                                padding: '16px',
-                                borderRadius: '14px',
-                                border: 'none',
-                                background: '#fff',
-                                color: '#000',
-                                fontWeight: 600,
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '8px',
-                                marginTop: '1rem'
+                                padding: '0.75rem 1rem',
+                                background: 'rgba(239, 68, 68, 0.1)',
+                                border: '1px solid rgba(239, 68, 68, 0.3)',
+                                borderRadius: '12px',
+                                color: '#fca5a5',
+                                fontSize: '0.85rem',
+                                marginBottom: '1.5rem',
+                                textAlign: 'center'
                             }}
                         >
-                            {loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Create Account')}
-                            {!loading && <ArrowRight size={18} />}
-                        </motion.button>
-                    </form>
-
-                    <div style={{ margin: '1.5rem 0', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <div style={{ height: '1px', flex: 1, background: 'rgba(255,255,255,0.1)' }} />
-                        <span style={{ fontSize: '0.8rem', color: '#71717a' }}>OR</span>
-                        <div style={{ height: '1px', flex: 1, background: 'rgba(255,255,255,0.1)' }} />
-                    </div>
+                            {error}
+                        </motion.div>
+                    )}
 
                     <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={handleGoogleLogin}
-                        type="button"
+                        disabled={loading}
                         style={{
                             width: '100%',
-                            padding: '14px',
+                            padding: '1rem',
+                            background: '#fff',
+                            color: '#18181b',
+                            border: 'none',
                             borderRadius: '14px',
-                            border: '1px solid rgba(255,255,255,0.1)',
-                            background: 'transparent',
-                            color: '#fff',
-                            fontWeight: 500,
-                            cursor: 'pointer',
+                            fontSize: '1rem',
+                            fontWeight: 600,
+                            cursor: loading ? 'not-allowed' : 'pointer',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            gap: '10px'
+                            gap: '0.75rem',
+                            transition: 'all 0.3s ease',
+                            boxShadow: '0 4px 12px rgba(255, 255, 255, 0.1)',
+                            opacity: loading ? 0.7 : 1
                         }}
                     >
-                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="18" />
-                        Continue with Google
+                        <svg width="20" height="20" viewBox="0 0 48 48">
+                            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+                            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+                            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+                            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+                            <path fill="none" d="M0 0h48v48H0z" />
+                        </svg>
+                        {loading ? 'Signing in...' : 'Continue with Google'}
                     </motion.button>
 
-                    <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-                        <button
-                            onClick={() => setIsLogin(!isLogin)}
-                            style={{ background: 'none', border: 'none', color: '#a1a1aa', fontSize: '0.9rem', cursor: 'pointer' }}
-                        >
-                            {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
-                        </button>
-                    </div>
+                    <p style={{
+                        textAlign: 'center',
+                        color: '#71717a',
+                        fontSize: '0.75rem',
+                        marginTop: '2rem',
+                        lineHeight: '1.5'
+                    }}>
+                        By continuing, you agree to our Terms of Service and Privacy Policy
+                    </p>
                 </div>
             </motion.div>
         </div>

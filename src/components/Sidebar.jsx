@@ -5,52 +5,52 @@ const toolCategories = [
     {
         name: "Text & Chat",
         tools: [
-            { name: "ChatGPT", src: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" },
-            { name: "Claude", src: "https://upload.wikimedia.org/wikipedia/commons/7/77/Anthropic_logo.svg" },
-            { name: "Gemini", src: "https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg" },
-            { name: "Jasper", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Jasper_AI_logo.svg/512px-Jasper_AI_logo.svg.png" },
-            { name: "Notion AI", src: "https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png" },
+            { name: "ChatGPT", src: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg", url: "https://chatgpt.com" },
+            { name: "Claude", src: "https://upload.wikimedia.org/wikipedia/commons/7/77/Anthropic_logo.svg", url: "https://claude.ai" },
+            { name: "Gemini", src: "https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg", url: "https://gemini.google.com" },
+            { name: "Jasper", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Jasper_AI_logo.svg/512px-Jasper_AI_logo.svg.png", url: "https://jasper.ai" },
+            { name: "Notion AI", src: "https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png", url: "https://notion.so" },
         ]
     },
     {
         name: "Image Gen",
         tools: [
-            { name: "DALL·E", src: "https://cdn.worldvectorlogo.com/logos/openai-2.svg" },
-            { name: "Midjourney", src: "https://upload.wikimedia.org/wikipedia/commons/e/ed/Midjourney_Emblem.png" },
-            { name: "Stable Diffusion", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Stability_AI_logo.svg/512px-Stability_AI_logo.svg.png" },
-            { name: "Adobe Firefly", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Adobe_Firefly_Icon.svg/512px-Adobe_Firefly_Icon.svg.png" },
+            { name: "DALL·E", src: "https://cdn.worldvectorlogo.com/logos/openai-2.svg", url: "https://openai.com/dall-e-3" },
+            { name: "Midjourney", src: "https://upload.wikimedia.org/wikipedia/commons/e/ed/Midjourney_Emblem.png", url: "https://midjourney.com" },
+            { name: "Stable Diffusion", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Stability_AI_logo.svg/512px-Stability_AI_logo.svg.png", url: "https://stability.ai" },
+            { name: "Adobe Firefly", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Adobe_Firefly_Icon.svg/512px-Adobe_Firefly_Icon.svg.png", url: "https://firefly.adobe.com" },
         ]
     },
     {
         name: "Video AI",
         tools: [
-            { name: "Runway", src: "https://cdn.worldvectorlogo.com/logos/runway-1.svg" },
-            { name: "Pika", src: "" }, // Fallback to text
-            { name: "Synthesia", src: "https://cdn.worldvectorlogo.com/logos/synthesia-1.svg" },
-            { name: "HeyGen", src: "" },
+            { name: "Runway", src: "https://cdn.worldvectorlogo.com/logos/runway-1.svg", url: "https://runwayml.com" },
+            { name: "Pika", src: "", url: "https://pika.art" },
+            { name: "Synthesia", src: "https://cdn.worldvectorlogo.com/logos/synthesia-1.svg", url: "https://synthesia.io" },
+            { name: "HeyGen", src: "", url: "https://heygen.com" },
         ]
     },
     {
         name: "Voice & Audio",
         tools: [
-            { name: "ElevenLabs", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/ElevenLabs_logo.svg/512px-ElevenLabs_logo.svg.png" }, // Hypothetical, fallback likely
-            { name: "PlayHT", src: "" },
-            { name: "Descript", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Descript_logo.svg/512px-Descript_logo.svg.png" },
+            { name: "ElevenLabs", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/ElevenLabs_logo.svg/512px-ElevenLabs_logo.svg.png", url: "https://elevenlabs.io" },
+            { name: "PlayHT", src: "", url: "https://play.ht" },
+            { name: "Descript", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Descript_logo.svg/512px-Descript_logo.svg.png", url: "https://descript.com" },
         ]
     },
     {
         name: "Coding",
         tools: [
-            { name: "GitHub Copilot", src: "https://upload.wikimedia.org/wikipedia/commons/2/29/GitHub_Copilot_logo.svg" },
-            { name: "Replit AI", src: "https://upload.wikimedia.org/wikipedia/commons/7/78/Replit_Logo.svg" },
-            { name: "CodeWhisperer", src: "" },
+            { name: "GitHub Copilot", src: "https://upload.wikimedia.org/wikipedia/commons/2/29/GitHub_Copilot_logo.svg", url: "https://github.com/features/copilot" },
+            { name: "Replit AI", src: "https://upload.wikimedia.org/wikipedia/commons/7/78/Replit_Logo.svg", url: "https://replit.com/ai" },
+            { name: "CodeWhisperer", src: "", url: "https://aws.amazon.com/codewhisperer/" },
         ]
     },
     {
         name: "Design & UI",
         tools: [
-            { name: "Uizard", src: "https://cdn.worldvectorlogo.com/logos/uizard-1.svg" },
-            { name: "Galileo AI", src: "" },
+            { name: "Uizard", src: "https://cdn.worldvectorlogo.com/logos/uizard-1.svg", url: "https://uizard.io" },
+            { name: "Galileo AI", src: "", url: "https://usegalileo.ai" },
         ]
     }
 ];
@@ -78,7 +78,7 @@ export default function Sidebar({ topics, activeId, completedSections = [] }) {
             padding: '2rem 1rem',
             borderRight: '1px solid var(--border-color)',
             background: 'var(--bg-primary)',
-            display: 'flex',
+            display: window.innerWidth < 1024 ? 'none' : 'flex',
             flexDirection: 'column'
         }}>
             <div style={{ marginBottom: '2rem' }}>
@@ -102,7 +102,6 @@ export default function Sidebar({ topics, activeId, completedSections = [] }) {
                                 <button
                                     onClick={() => !locked && scrollToSection(topic.id)}
                                     style={{
-                                        background: 'none',
                                         border: 'none',
                                         cursor: locked ? 'not-allowed' : 'pointer',
                                         textAlign: 'left',
@@ -112,7 +111,7 @@ export default function Sidebar({ topics, activeId, completedSections = [] }) {
                                         color: activeId === topic.id ? 'var(--text-primary)' : (locked ? 'var(--text-secondary)' : 'var(--text-secondary)'),
                                         fontWeight: activeId === topic.id ? 600 : 400,
                                         borderRadius: '6px',
-                                        background: activeId === topic.id ? 'var(--bg-secondary)' : 'transparent',
+                                        background: activeId === topic.id ? 'var(--bg-secondary)' : 'none',
                                         transition: 'all 0.2s ease',
                                         display: 'flex',
                                         alignItems: 'center',
@@ -187,18 +186,37 @@ const ToolCategory = ({ category }) => {
                 gap: '0.5rem'
             }}>
                 {category.tools.map((tool, idx) => (
-                    <div key={idx} style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        padding: '0.4rem',
-                        borderRadius: '6px',
-                        background: 'var(--bg-secondary)',
-                        border: '1px solid var(--border-color)',
-                        fontSize: '0.75rem',
-                        color: 'var(--text-secondary)',
-                        overflow: 'hidden'
-                    }}>
+                    <a
+                        key={idx}
+                        href={tool.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            padding: '0.4rem',
+                            borderRadius: '6px',
+                            background: 'var(--bg-secondary)',
+                            border: '1px solid var(--border-color)',
+                            fontSize: '0.75rem',
+                            color: 'var(--text-secondary)',
+                            overflow: 'hidden',
+                            textDecoration: 'none',
+                            transition: 'all 0.2s ease',
+                            cursor: 'pointer'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.borderColor = 'var(--accent-color)';
+                            e.currentTarget.style.color = 'var(--text-primary)';
+                            e.currentTarget.style.transform = 'translateY(-1px)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.borderColor = 'var(--border-color)';
+                            e.currentTarget.style.color = 'var(--text-secondary)';
+                            e.currentTarget.style.transform = 'translateY(0)';
+                        }}
+                    >
                         {tool.src && (
                             <img
                                 src={tool.src}
@@ -215,7 +233,7 @@ const ToolCategory = ({ category }) => {
                         <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {tool.name}
                         </span>
-                    </div>
+                    </a>
                 ))}
             </div>
         </div>

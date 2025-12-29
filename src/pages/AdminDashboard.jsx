@@ -1,8 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { db } from '../firebase';
-import { collection, getDocs, query, where } from 'firebase/firestore';
 import { Users, BookOpen, CheckCircle, BarChart3, ArrowLeft, Search, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ThemeToggle from '../components/ThemeToggle';
@@ -16,14 +13,13 @@ export default function AdminDashboard() {
     const { theme } = useTheme();
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            const usersCol = collection(db, 'users');
-            const userSnapshot = await getDocs(usersCol);
-            const userList = userSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setUsers(userList);
-            setLoading(false);
-        };
-        fetchUsers();
+        // Load users from localStorage (mock data)
+        const storedUserData = localStorage.getItem('userData');
+        if (storedUserData) {
+            const userData = JSON.parse(storedUserData);
+            setUsers([{ id: 'current_user', ...userData }]);
+        }
+        setLoading(false);
     }, []);
 
     const totalUsers = users.length;
