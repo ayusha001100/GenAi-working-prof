@@ -1,5 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
+import {
+    onAuthStateChanged,
+    signInWithPopup,
+    signOut,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword
+} from 'firebase/auth';
+import { doc, getDoc, setDoc, updateDoc, onSnapshot } from 'firebase/firestore';
+import { auth, db, googleProvider } from '../firebase';
 
 const AuthContext = createContext(null);
 
@@ -9,119 +18,85 @@ export const AuthProvider = ({ children }) => {
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        // Load user from localStorage on mount
-        const storedUser = localStorage.getItem('user');
-        const storedUserData = localStorage.getItem('userData');
-        
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
-        if (storedUserData) {
-            setUserData(JSON.parse(storedUserData));
-        }
-        setLoading(false);
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            setUser(currentUser);
+            if (currentUser) {
+                // Fetch or sync user data from Firestore
+                const userDocRef = doc(db, 'users', currentUser.uid);
+
+                // Real-time listener for user data
+                const unsubDoc = onSnapshot(userDocRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        setUserData(docSnap.data());
+                    } else {
+                        // Create initial record if it doesn't exist
+                        const initialData = {
+                            email: currentUser.email,
+                            name: currentUser.displayName || currentUser.email.split('@')[0],
+                            createdAt: new Date().toISOString(),
+                            progress: {
+                                completedSections: []
+                            },
+                            stats: {
+                                totalPoints: 0,
+                                totalCorrect: 0,
+                                totalIncorrect: 0
+                            },
+                            role: 'user'
+                        };
+                        setDoc(userDocRef, initialData);
+                        setUserData(initialData);
+                    }
+                });
+
+                setLoading(false);
+                return () => unsubDoc();
+            } else {
+                setUserData(null);
+                setLoading(false);
+            }
+        });
+
+        return () => unsubscribe();
     }, []);
 
     const login = (email, password) => {
-        // Mock login - create a user object
-        const mockUser = {
-            uid: `user_${Date.now()}`,
-            email: email,
-            displayName: email.split('@')[0],
-            metadata: {
-                creationTime: new Date().toISOString()
-            }
-        };
-        setUser(mockUser);
-        localStorage.setItem('user', JSON.stringify(mockUser));
-        
-        const initialData = {
-            email: email,
-            name: email.split('@')[0],
-            createdAt: new Date().toISOString(),
-            progress: {
-                completedSections: []
-            },
-            stats: {
-                totalPoints: 0,
-                totalCorrect: 0,
-                totalIncorrect: 0
-            },
-            role: 'user'
-        };
-        setUserData(initialData);
-        localStorage.setItem('userData', JSON.stringify(initialData));
-        
-        return Promise.resolve({ user: mockUser });
+        return signInWithEmailAndPassword(auth, email, password);
     };
 
     const signup = (email, password) => {
-        // Mock signup - same as login
-        return login(email, password);
+        return createUserWithEmailAndPassword(auth, email, password);
     };
 
     const loginWithGoogle = () => {
-        // Mock Google login - create a user object
-        const mockUser = {
-            uid: `user_${Date.now()}`,
-            email: 'user@example.com',
-            displayName: 'User',
-            metadata: {
-                creationTime: new Date().toISOString()
-            }
-        };
-        setUser(mockUser);
-        localStorage.setItem('user', JSON.stringify(mockUser));
-        
-        const storedUserData = localStorage.getItem('userData');
-        if (!storedUserData) {
-            const initialData = {
-                email: 'user@example.com',
-                name: 'User',
-                createdAt: new Date().toISOString(),
-                progress: {
-                    completedSections: []
-                },
-                stats: {
-                    totalPoints: 0,
-                    totalCorrect: 0,
-                    totalIncorrect: 0
-                },
-                role: 'user'
-            };
-            setUserData(initialData);
-            localStorage.setItem('userData', JSON.stringify(initialData));
-        } else {
-            setUserData(JSON.parse(storedUserData));
-        }
-        
-        return Promise.resolve({ user: mockUser });
+        return signInWithPopup(auth, googleProvider);
     };
 
     const logout = () => {
-        setUser(null);
-        setUserData(null);
-        localStorage.removeItem('user');
-        localStorage.removeItem('userData');
-        return Promise.resolve();
+        return signOut(auth);
     };
 
-    const updateUserData = (newData) => {
-        // If newData is a function, use it to update state
-        // Otherwise, if it has progress/stats (full userData object), use it directly
-        // Otherwise merge with existing userData
+    const updateUserData = async (newData) => {
+        if (!user) return;
+
+        const userDocRef = doc(db, 'users', user.uid);
         let updatedData;
+
         if (typeof newData === 'function') {
             updatedData = newData(userData);
         } else if (newData && (newData.progress || newData.stats)) {
-            // Full userData object provided
             updatedData = newData;
         } else {
-            // Partial update - merge
             updatedData = { ...userData, ...newData };
         }
-        setUserData(updatedData);
-        localStorage.setItem('userData', JSON.stringify(updatedData));
+
+        try {
+            await updateDoc(userDocRef, updatedData);
+        } catch (error) {
+            console.error("Error updating user data:", error);
+            // Fallback to setDoc if it doesn't exist
+            await setDoc(userDocRef, updatedData, { merge: true });
+        }
     };
 
     const value = {
