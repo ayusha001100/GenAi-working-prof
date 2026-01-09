@@ -195,22 +195,74 @@ export default function GsapHero() {
                             from { opacity: 0; transform: translateY(5px); }
                             to { opacity: 1; transform: translateY(0); }
                         }
+                        @keyframes pulse {
+                            0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.15; }
+                            50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.25; }
+                            100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.15; }
+                        }
+                        @keyframes float {
+                            0% { transform: translateY(0px) rotate(0deg); }
+                            50% { transform: translateY(-10px) rotate(5deg); }
+                            100% { transform: translateY(0px) rotate(0deg); }
+                        }
+                        @keyframes textGlow {
+                            0% { text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 170, 2, 0.1); }
+                            50% { text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), 0 0 30px rgba(255, 170, 2, 0.4); }
+                            100% { text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 170, 2, 0.1); }
+                        }
+                        @keyframes shimmerText {
+                            0% { background-position: -200% 0; }
+                            100% { background-position: 200% 0; }
+                        }
+                        @keyframes glow {
+                            0% { opacity: 0.6; }
+                            50% { opacity: 1; }
+                            100% { opacity: 0.6; }
+                        }
+                        @keyframes expandContract {
+                            0% { width: 120px; }
+                            50% { width: 150px; }
+                            100% { width: 120px; }
+                        }
+                        @keyframes bounce {
+                            0%, 100% { transform: translateX(-50%) translateY(0); }
+                            50% { transform: translateX(-50%) translateY(-10px); }
+                        }
                     `}
                 </style>
+                {/* CTA Section */}
                 <div ref={ctaRef} style={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     gap: '1rem',
-                    marginBottom: '3rem'
+                    marginBottom: '3rem',
+                    position: 'relative',
+                    zIndex: 2
                 }}>
+                    {/* Animated Background Glow */}
+                    <div style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '600px',
+                        height: '600px',
+                        background: 'radial-gradient(circle, rgba(255, 170, 2, 0.15) 0%, transparent 70%)',
+                        filter: 'blur(60px)',
+                        animation: 'pulse 4s ease-in-out infinite',
+                        zIndex: -1
+                    }} />
+
                     <h1 style={{
                         fontSize: 'clamp(2rem, 4vw, 3rem)',
                         color: '#FFAA02',
                         fontWeight: 900,
                         lineHeight: 1.1,
                         margin: 0,
-                        letterSpacing: '-0.5px'
+                        letterSpacing: '-0.5px',
+                        textShadow: '0 0 20px rgba(255, 170, 2, 0.3)',
+                        animation: 'float 3s ease-in-out infinite'
                     }}>
                         Why LetsUpgrade ?
                     </h1>
@@ -222,60 +274,167 @@ export default function GsapHero() {
                             color: 'var(--text-primary)',
                             fontWeight: 800,
                             margin: 0,
-                            animation: 'fadeIn 0.5s ease',
+                            animation: 'fadeIn 0.5s ease, textGlow 2s ease-in-out infinite',
                             opacity: 1,
                             lineHeight: 1.1,
-                            whiteSpace: 'nowrap', // Force single line
-                            minHeight: '1.5em', // Reduced minHeight for single line stability
+                            whiteSpace: 'nowrap',
+                            minHeight: '1.5em',
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'center'
+                            justifyContent: 'center',
+                            textShadow: '4px 4px 8px rgba(0, 0, 0, 0.1), 0 0 40px rgba(255, 170, 2, 0.2)',
+                            transform: 'perspective(1000px) rotateX(5deg)',
+                            transition: 'all 0.3s ease'
                         }}
                     >
                         GET {outcomes[outcomeIndex]}
                     </h2>
                 </div>
 
-                {/* Hero Text */}
-                <div ref={textRef} style={{ overflow: 'hidden', marginBottom: '1.5rem' }}>
+                {/* Hero Text - GOD LEVEL */}
+                <div ref={textRef} style={{ overflow: 'visible', marginBottom: '1.5rem', position: 'relative' }}>
                     <div style={{
                         textAlign: 'center',
                         marginBottom: '2rem',
-                        position: 'relative'
+                        position: 'relative',
+                        padding: '2rem 1rem'
                     }}>
-                        <p style={{
-                            fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)',
-                            fontWeight: 600,
-                            background: 'linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 50%, #1a1a1a 100%)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            backgroundClip: 'text',
-                            letterSpacing: '-0.02em',
-                            lineHeight: 1.4,
-                            margin: 0,
-                            padding: '0.5rem 1rem',
+                        {/* Floating particles background */}
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            overflow: 'hidden',
+                            pointerEvents: 'none',
+                            zIndex: 0
+                        }}>
+                            {[...Array(6)].map((_, i) => (
+                                <div
+                                    key={i}
+                                    style={{
+                                        position: 'absolute',
+                                        width: `${Math.random() * 6 + 2}px`,
+                                        height: `${Math.random() * 6 + 2}px`,
+                                        background: '#FFAA02',
+                                        borderRadius: '50%',
+                                        left: `${Math.random() * 100}%`,
+                                        top: `${Math.random() * 100}%`,
+                                        animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
+                                        animationDelay: `${Math.random() * 2}s`,
+                                        opacity: 0.4,
+                                        boxShadow: '0 0 10px rgba(255, 170, 2, 0.5)'
+                                    }}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Main tagline with 3D effect */}
+                        <div style={{
                             position: 'relative',
                             display: 'inline-block',
-                            animation: 'subtlePulse 3s ease-in-out infinite'
-                        }}>
-                            Future-proof your career—<span style={{
-                                background: 'linear-gradient(135deg, #FFAA02 0%, #FF8C00 100%)',
+                            padding: '1.5rem 2.5rem',
+                            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%)',
+                            borderRadius: '20px',
+                            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 170, 2, 0.1)',
+                            transform: 'perspective(1000px) rotateX(2deg)',
+                            transition: 'all 0.3s ease',
+                            border: '2px solid transparent',
+                            backgroundClip: 'padding-box',
+                            zIndex: 1
+                        }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) translateY(-5px)';
+                                e.currentTarget.style.boxShadow = '0 30px 80px rgba(255, 170, 2, 0.2), 0 0 0 2px rgba(255, 170, 2, 0.3)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = 'perspective(1000px) rotateX(2deg)';
+                                e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 170, 2, 0.1)';
+                            }}
+                        >
+                            <p style={{
+                                fontSize: 'clamp(1.2rem, 2.8vw, 1.8rem)',
+                                fontWeight: 700,
+                                background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%)',
                                 WebkitBackgroundClip: 'text',
                                 WebkitTextFillColor: 'transparent',
                                 backgroundClip: 'text',
-                                fontWeight: 700
-                            }}>without quitting your job.</span>
-                        </p>
+                                letterSpacing: '-0.03em',
+                                lineHeight: 1.5,
+                                margin: 0,
+                                position: 'relative',
+                                textShadow: 'none'
+                            }}>
+                                Future-proof your career—
+                                <br />
+                                <span style={{
+                                    background: 'linear-gradient(135deg, #FFAA02 0%, #FF8C00 50%, #FFAA02 100%)',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
+                                    backgroundClip: 'text',
+                                    fontWeight: 900,
+                                    fontSize: '1.1em',
+                                    display: 'inline-block',
+                                    animation: 'shimmerText 3s ease-in-out infinite',
+                                    backgroundSize: '200% auto'
+                                }}>without quitting your job.</span>
+                            </p>
 
-                        {/* Decorative underline */}
+                            {/* Glowing corner accents */}
+                            <div style={{
+                                position: 'absolute',
+                                top: '-2px',
+                                left: '-2px',
+                                width: '30px',
+                                height: '30px',
+                                border: '3px solid #FFAA02',
+                                borderRight: 'none',
+                                borderBottom: 'none',
+                                borderRadius: '20px 0 0 0',
+                                opacity: 0.6,
+                                animation: 'glow 2s ease-in-out infinite'
+                            }} />
+                            <div style={{
+                                position: 'absolute',
+                                bottom: '-2px',
+                                right: '-2px',
+                                width: '30px',
+                                height: '30px',
+                                border: '3px solid #FFAA02',
+                                borderLeft: 'none',
+                                borderTop: 'none',
+                                borderRadius: '0 0 20px 0',
+                                opacity: 0.6,
+                                animation: 'glow 2s ease-in-out infinite',
+                                animationDelay: '1s'
+                            }} />
+                        </div>
+
+                        {/* Animated underline with particles */}
                         <div style={{
-                            width: '60px',
-                            height: '3px',
+                            width: '120px',
+                            height: '4px',
                             background: 'linear-gradient(90deg, transparent, #FFAA02, transparent)',
-                            margin: '1rem auto 0',
+                            margin: '2rem auto 0',
                             borderRadius: '2px',
-                            animation: 'shimmer 2s ease-in-out infinite'
-                        }} />
+                            position: 'relative',
+                            animation: 'expandContract 3s ease-in-out infinite',
+                            boxShadow: '0 0 20px rgba(255, 170, 2, 0.5)'
+                        }}>
+                            <div style={{
+                                position: 'absolute',
+                                width: '8px',
+                                height: '8px',
+                                background: '#FFAA02',
+                                borderRadius: '50%',
+                                top: '-2px',
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                                animation: 'bounce 1.5s ease-in-out infinite',
+                                boxShadow: '0 0 15px rgba(255, 170, 2, 0.8)'
+                            }} />
+                        </div>
                     </div>
 
                 </div>
