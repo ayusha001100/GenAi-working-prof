@@ -173,37 +173,65 @@ export default function GsapHero() {
                 position: 'absolute', top: '15%', right: '15%',
                 width: '400px', height: '400px',
                 background: 'radial-gradient(circle, rgba(255, 170, 2, 0.15) 0%, transparent 70%)',
+            {/* Animated Background Orbs */}
+            <div style={{
+                position: 'absolute',
+                top: '10%',
+                left: '5%',
+                width: '400px',
+                height: '400px',
+                background: 'radial-gradient(circle, rgba(255, 170, 2, 0.08) 0%, transparent 70%)',
+                borderRadius: '50%',
                 filter: 'blur(60px)',
-                borderRadius: '50%',
+                animation: 'float 20s ease-in-out infinite',
                 zIndex: 0
             }} />
-            <div ref={floatRef2} style={{
-                position: 'absolute', bottom: '15%', left: '10%',
-                width: '500px', height: '500px',
-                background: 'radial-gradient(circle, rgba(255, 170, 2, 0.12) 0%, transparent 70%)',
+            <div style={{
+                position: 'absolute',
+                bottom: '10%',
+                right: '5%',
+                width: '500px',
+                height: '500px',
+                background: 'radial-gradient(circle, rgba(255, 170, 2, 0.06) 0%, transparent 70%)',
+                borderRadius: '50%',
                 filter: 'blur(80px)',
-                borderRadius: '50%',
+                animation: 'float 25s ease-in-out infinite reverse',
                 zIndex: 0
             }} />
 
-            {/* Main Content */}
-            <div style={{ position: 'relative', zIndex: 10, padding: '0 2rem', textAlign: 'center', maxWidth: '1000px' }}>
+            {/* Main Content Container */}
+            <div style={{
+                maxWidth: '1400px',
+                margin: '0 auto',
+                padding: '0 2rem',
+                position: 'relative',
+                zIndex: 1
+            }}>
 
+                {/* Inline CSS for animations */}
                 <style>
                     {`
                         @keyframes fadeIn {
                             from { opacity: 0; transform: translateY(5px); }
                             to { opacity: 1; transform: translateY(0); }
                         }
+                        @keyframes gradientShift {
+                            0% { background-position: 0% 50%; }
+                            50% { background-position: 100% 50%; }
+                            100% { background-position: 0% 50%; }
+                        }
+                        @keyframes float {
+                            0%, 100% { transform: translate(0, 0); }
+                            50% { transform: translate(30px, -30px); }
+                        }
+                        @keyframes buttonPulse {
+                            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 170, 2, 0.7); }
+                            50% { box-shadow: 0 0 0 20px rgba(255, 170, 2, 0); }
+                        }
                         @keyframes pulse {
                             0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.15; }
                             50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.25; }
                             100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.15; }
-                        }
-                        @keyframes float {
-                            0% { transform: translateY(0px) rotate(0deg); }
-                            50% { transform: translateY(-10px) rotate(5deg); }
-                            100% { transform: translateY(0px) rotate(0deg); }
                         }
                         @keyframes textGlow {
                             0% { text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 170, 2, 0.1); }
@@ -227,6 +255,10 @@ export default function GsapHero() {
                         @keyframes bounce {
                             0%, 100% { transform: translateX(-50%) translateY(0); }
                             50% { transform: translateX(-50%) translateY(-10px); }
+                        }
+                        @keyframes scroll {
+                            0% { transform: translateX(0); }
+                            100% { transform: translateX(-50%); }
                         }
                     `}
                 </style>
@@ -309,37 +341,53 @@ export default function GsapHero() {
                             { icon: <MessageSquare size={28} color="#FFAA02" />, title: "Interview Prep + Mentors", desc: "Expert guidance" },
                             { icon: <Users size={28} color="#FFAA02" />, title: "Community + Weekly Sprints", desc: "Learn together" }
                         ].map((item, index) => (
-                            <div key={index}
+                            <div key={`first-${index}`}
                                 className="feature-card"
                                 style={{
-                                    background: '#FFFFFF',
-                                    border: '1px solid rgba(255, 170, 2, 0.1)',
+                                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FFFEF8 100%)',
+                                    border: '2px solid rgba(255, 170, 2, 0.15)',
                                     borderRadius: '24px',
-                                    padding: '2rem 1.8rem',
+                                    padding: '2.5rem 2rem',
                                     textAlign: 'center',
-                                    transition: 'all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)',
+                                    transition: 'all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1)',
                                     cursor: 'default',
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'center',
                                     gap: '1rem',
                                     position: 'relative',
-                                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.02)',
+                                    boxShadow: '0 8px 30px rgba(255, 170, 2, 0.08)',
                                     overflow: 'hidden',
                                     minWidth: '280px',
                                     flex: '0 0 auto'
                                 }}
                                 onMouseEnter={(e) => {
-                                    e.currentTarget.style.transform = 'translateY(-8px) scale(1.02)';
-                                    e.currentTarget.style.boxShadow = '0 20px 40px rgba(255, 170, 2, 0.15)';
-                                    e.currentTarget.style.borderColor = 'rgba(255, 170, 2, 0.3)';
+                                    e.currentTarget.style.transform = 'translateY(-12px) scale(1.03) rotateY(5deg)';
+                                    e.currentTarget.style.boxShadow = '0 30px 60px rgba(255, 170, 2, 0.25)';
+                                    e.currentTarget.style.borderColor = 'rgba(255, 170, 2, 0.5)';
+                                    e.currentTarget.style.background = 'linear-gradient(135deg, #FFFFFF 0%, #FFF8E1 100%)';
+                                    e.currentTarget.querySelector('.card-glow').style.opacity = 1;
                                 }}
                                 onMouseLeave={(e) => {
-                                    e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                                    e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.02)';
-                                    e.currentTarget.style.borderColor = 'rgba(255, 170, 2, 0.1)';
+                                    e.currentTarget.style.transform = 'translateY(0) scale(1) rotateY(0deg)';
+                                    e.currentTarget.style.boxShadow = '0 8px 30px rgba(255, 170, 2, 0.08)';
+                                    e.currentTarget.style.borderColor = 'rgba(255, 170, 2, 0.15)';
+                                    e.currentTarget.style.background = 'linear-gradient(135deg, #FFFFFF 0%, #FFFEF8 100%)';
+                                    e.currentTarget.querySelector('.card-glow').style.opacity = 0;
                                 }}
                             >
+                                {/* Glow effect on hover */}
+                                <div style={{
+                                    position: 'absolute',
+                                    top: '-50%',
+                                    left: '-50%',
+                                    width: '200%',
+                                    height: '200%',
+                                    background: 'radial-gradient(circle, rgba(255, 170, 2, 0.1) 0%, transparent 70%)',
+                                    opacity: 0,
+                                    transition: 'opacity 0.5s',
+                                    pointerEvents: 'none'
+                                }} className="card-glow" />
                                 <div style={{
                                     width: '64px',
                                     height: '64px',
@@ -383,34 +431,50 @@ export default function GsapHero() {
                             <div key={`dup-${index}`}
                                 className="feature-card"
                                 style={{
-                                    background: '#FFFFFF',
-                                    border: '1px solid rgba(255, 170, 2, 0.1)',
+                                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FFFEF8 100%)',
+                                    border: '2px solid rgba(255, 170, 2, 0.15)',
                                     borderRadius: '24px',
-                                    padding: '2rem 1.8rem',
+                                    padding: '2.5rem 2rem',
                                     textAlign: 'center',
-                                    transition: 'all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)',
+                                    transition: 'all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1)',
                                     cursor: 'default',
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'center',
                                     gap: '1rem',
                                     position: 'relative',
-                                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.02)',
+                                    boxShadow: '0 8px 30px rgba(255, 170, 2, 0.08)',
                                     overflow: 'hidden',
                                     minWidth: '280px',
                                     flex: '0 0 auto'
                                 }}
                                 onMouseEnter={(e) => {
-                                    e.currentTarget.style.transform = 'translateY(-8px) scale(1.02)';
-                                    e.currentTarget.style.boxShadow = '0 20px 40px rgba(255, 170, 2, 0.15)';
-                                    e.currentTarget.style.borderColor = 'rgba(255, 170, 2, 0.3)';
+                                    e.currentTarget.style.transform = 'translateY(-12px) scale(1.03) rotateY(5deg)';
+                                    e.currentTarget.style.boxShadow = '0 30px 60px rgba(255, 170, 2, 0.25)';
+                                    e.currentTarget.style.borderColor = 'rgba(255, 170, 2, 0.5)';
+                                    e.currentTarget.style.background = 'linear-gradient(135deg, #FFFFFF 0%, #FFF8E1 100%)';
+                                    e.currentTarget.querySelector('.card-glow').style.opacity = 1;
                                 }}
                                 onMouseLeave={(e) => {
-                                    e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                                    e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.02)';
-                                    e.currentTarget.style.borderColor = 'rgba(255, 170, 2, 0.1)';
+                                    e.currentTarget.style.transform = 'translateY(0) scale(1) rotateY(0deg)';
+                                    e.currentTarget.style.boxShadow = '0 8px 30px rgba(255, 170, 2, 0.08)';
+                                    e.currentTarget.style.borderColor = 'rgba(255, 170, 2, 0.15)';
+                                    e.currentTarget.style.background = 'linear-gradient(135deg, #FFFFFF 0%, #FFFEF8 100%)';
+                                    e.currentTarget.querySelector('.card-glow').style.opacity = 0;
                                 }}
                             >
+                                {/* Glow effect on hover */}
+                                <div style={{
+                                    position: 'absolute',
+                                    top: '-50%',
+                                    left: '-50%',
+                                    width: '200%',
+                                    height: '200%',
+                                    background: 'radial-gradient(circle, rgba(255, 170, 2, 0.1) 0%, transparent 70%)',
+                                    opacity: 0,
+                                    transition: 'opacity 0.5s',
+                                    pointerEvents: 'none'
+                                }} className="card-glow" />
                                 <div style={{
                                     width: '64px',
                                     height: '64px',
@@ -445,27 +509,58 @@ export default function GsapHero() {
                     </div>
                 </div>
 
-                <div style={{ marginTop: '3rem' }}>
+                <div style={{ marginTop: '3rem', position: 'relative', display: 'inline-block' }}>
+                    {/* Pulsing glow ring */}
+                    <div style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '50px',
+                        animation: 'pulse 2s ease-in-out infinite',
+                        pointerEvents: 'none'
+                    }} />
+
                     <button
                         onClick={() => navigate('/get-started')}
                         style={{
-                            background: 'linear-gradient(135deg, #FFAA02 0%, #F59E0B 100%)',
+                            background: 'linear-gradient(135deg, #FFAA02 0%, #FF8C00 100%)',
                             color: '#000',
-                            padding: '1rem 3rem',
+                            padding: '1.25rem 3.5rem',
                             borderRadius: '50px',
-                            fontSize: '1.25rem',
-                            fontWeight: 700,
+                            fontSize: '1.35rem',
+                            fontWeight: 800,
                             border: 'none',
                             cursor: 'pointer',
                             display: 'inline-flex',
                             alignItems: 'center',
                             gap: '0.8rem',
-                            transition: 'all 0.3s cubic-bezier(0.2, 0, 0, 1)',
-                            boxShadow: '0 20px 40px -10px rgba(255, 170, 2, 0.3)'
+                            transition: 'all 0.4s cubic-bezier(0.2, 0, 0, 1)',
+                            boxShadow: '0 20px 60px -10px rgba(255, 170, 2, 0.5), 0 0 0 3px rgba(255, 170, 2, 0.1)',
+                            position: 'relative',
+                            overflow: 'hidden'
                         }}
-                        onMouseEnter={(e) => gsap.to(e.currentTarget, { scale: 1.05, duration: 0.3 })}
-                        onMouseLeave={(e) => gsap.to(e.currentTarget, { scale: 1, duration: 0.3 })}
+                        onMouseEnter={(e) => {
+                            gsap.to(e.currentTarget, { scale: 1.08, duration: 0.3 });
+                            e.currentTarget.style.boxShadow = '0 25px 80px -10px rgba(255, 170, 2, 0.6), 0 0 0 4px rgba(255, 170, 2, 0.2)';
+                        }}
+                        onMouseLeave={(e) => {
+                            gsap.to(e.currentTarget, { scale: 1, duration: 0.3 });
+                            e.currentTarget.style.boxShadow = '0 20px 60px -10px rgba(255, 170, 2, 0.5), 0 0 0 3px rgba(255, 170, 2, 0.1)';
+                        }}
                     >
+                        {/* Shimmer effect */}
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: '-100%',
+                            width: '100%',
+                            height: '100%',
+                            background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)',
+                            animation: 'shimmer 3s infinite'
+                        }} />
                         Get Started <ArrowRight size={24} />
                     </button>
                 </div>
