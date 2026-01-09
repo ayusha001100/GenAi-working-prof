@@ -254,11 +254,12 @@ export default function GsapHero() {
                     textAlign: 'center'
                 }}>
                     <h1 style={{
-                        fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+                        fontSize: 'clamp(1.1rem, 4vw, 2rem)',
                         color: '#FFAA02',
                         fontWeight: 600,
                         margin: 0,
-                        letterSpacing: '-0.01em'
+                        letterSpacing: '-0.01em',
+                        marginBottom: 'clamp(0.5rem, 2vw, 1rem)'
                     }}>
                         Why LetsUpgrade?
                     </h1>
@@ -266,14 +267,15 @@ export default function GsapHero() {
                     <h2
                         key={outcomeIndex}
                         style={{
-                            fontSize: 'clamp(3.5rem, 8vw, 7rem)',
+                            fontSize: 'clamp(2.5rem, 10vw, 7rem)',
                             color: 'var(--text-primary)',
                             fontWeight: 900,
                             margin: 0,
-                            lineHeight: 0.95,
+                            lineHeight: 1,
                             letterSpacing: '-0.04em',
                             textAlign: 'center',
-                            animation: 'slideUpFade 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                            animation: 'slideUpFade 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                            marginBottom: 'clamp(1rem, 3vw, 1.5rem)'
                         }}
                     >
                         GET {outcomes[outcomeIndex]}
