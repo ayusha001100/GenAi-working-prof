@@ -21,7 +21,7 @@ export default function GsapHero() {
 
     const [outcomeIndex, setOutcomeIndex] = useState(0);
     const [showSelection, setShowSelection] = useState(false);
-    const outcomes = ["Promotion", "Role Switch", "Productivity Boost"];
+    const outcomes = ["Promotion", "Role Switch", "Acceleration"];
 
     useEffect(() => {
         const interval = setInterval(() => {
