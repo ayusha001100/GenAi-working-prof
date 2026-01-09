@@ -161,12 +161,12 @@ export default function CurriculumPage() {
                             <p style={{ color: 'var(--text-secondary)' }}>A structured path from basics to advanced autonomous agents.</p>
                         </div>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '3rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'clamp(1.5rem, 4vw, 3rem)' }}>
                             {/* Module 1 */}
                             <div style={{
                                 background: 'var(--bg-primary)',
-                                padding: '3rem',
-                                borderRadius: '32px',
+                                padding: 'clamp(1.5rem, 4vw, 3rem)',
+                                borderRadius: 'clamp(24px, 4vw, 32px)',
                                 border: '1px solid var(--border-color)',
                                 position: 'relative',
                                 overflow: 'hidden'
@@ -184,7 +184,7 @@ export default function CurriculumPage() {
                                         DAY 1
                                     </div>
                                 </div>
-                                <h3 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '1rem' }}>Generative AI Fundamentals</h3>
+                                <h3 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, marginBottom: '1rem' }}>Generative AI Fundamentals</h3>
                                 <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
                                     The foundation step. Understand how LLMs 'think', learn to control them with advanced prompting, and explore the transformer architecture visually.
                                 </p>
@@ -229,8 +229,8 @@ export default function CurriculumPage() {
                             {/* Module 2 */}
                             <div style={{
                                 background: 'var(--bg-primary)',
-                                padding: '3rem',
-                                borderRadius: '32px',
+                                padding: 'clamp(1.5rem, 4vw, 3rem)',
+                                borderRadius: 'clamp(24px, 4vw, 32px)',
                                 border: '1px solid var(--border-color)',
                                 position: 'relative',
                                 overflow: 'hidden'
@@ -249,7 +249,7 @@ export default function CurriculumPage() {
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                                    <h3 style={{ fontSize: '2rem', fontWeight: 700 }}>Advanced Applications</h3>
+                                    <h3 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700 }}>Advanced Applications</h3>
                                     {!isDay1Complete && (
                                         <span style={{ fontSize: '0.8rem', padding: '0.4rem 0.8rem', background: 'var(--bg-secondary)', borderRadius: '20px', fontWeight: 600 }}>Locked</span>
                                     )}
