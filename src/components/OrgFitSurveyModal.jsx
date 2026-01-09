@@ -40,7 +40,7 @@ export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
         if (user) {
             setDoc(doc(db, 'users', user.uid), {
                 surveys: {
-                    org_fit: formData
+                    org_fit_survey: formData
                 }
             }, { merge: true }).catch(e => console.error("Error saving org fit:", e));
         }

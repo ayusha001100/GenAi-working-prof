@@ -29,7 +29,7 @@ export default function OutcomeSurveyModal({ isOpen, onClose, onComplete }) {
         if (user) {
             setDoc(doc(db, 'users', user.uid), {
                 surveys: {
-                    day1_outcome: selectedOutcome
+                    outcome_survey: selectedOutcome
                 }
             }, { merge: true }).catch(e => console.error("Error saving outcome:", e));
         }
