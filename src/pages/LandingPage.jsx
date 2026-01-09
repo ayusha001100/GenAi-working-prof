@@ -83,13 +83,16 @@ export default function LandingPage() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                padding: '1.5rem 5%',
+                padding: '1rem 5%',
                 position: 'fixed',
                 top: 0, left: 0, right: 0,
-                background: 'transparent',
-                backdropFilter: 'blur(0px)',
+                background: 'rgba(255, 255, 255, 0.7)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
                 zIndex: 50,
-                borderBottom: 'none'
+                borderBottom: '1px solid rgba(0,0,0,0.05)',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 30px rgba(0, 0, 0, 0.03)'
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                     <img src={theme === 'dark' ? '/logo-dark.png' : '/logo.png'} alt="Logo" style={{ width: '36px', height: '36px', objectFit: 'contain' }} />
