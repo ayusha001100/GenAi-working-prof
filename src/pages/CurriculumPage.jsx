@@ -153,7 +153,7 @@ export default function CurriculumPage() {
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    style={{ padding: '2rem 5%' }}
+                    style={{ padding: '2rem clamp(1rem, 5%, 5%)' }}
                 >
                     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
                         <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
@@ -161,11 +161,11 @@ export default function CurriculumPage() {
                             <p style={{ color: 'var(--text-secondary)' }}>A structured path from basics to advanced autonomous agents.</p>
                         </div>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'clamp(1.5rem, 4vw, 3rem)' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'clamp(1.5rem, 4vw, 3rem)' }}>
                             {/* Module 1 */}
                             <div style={{
                                 background: 'var(--bg-primary)',
-                                padding: 'clamp(1.5rem, 4vw, 3rem)',
+                                padding: 'clamp(1.25rem, 4vw, 3rem)',
                                 borderRadius: 'clamp(24px, 4vw, 32px)',
                                 border: '1px solid var(--border-color)',
                                 position: 'relative',
@@ -229,7 +229,7 @@ export default function CurriculumPage() {
                             {/* Module 2 */}
                             <div style={{
                                 background: 'var(--bg-primary)',
-                                padding: 'clamp(1.5rem, 4vw, 3rem)',
+                                padding: 'clamp(1.25rem, 4vw, 3rem)',
                                 borderRadius: 'clamp(24px, 4vw, 32px)',
                                 border: '1px solid var(--border-color)',
                                 position: 'relative',
