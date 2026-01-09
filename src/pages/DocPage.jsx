@@ -392,7 +392,7 @@ export default function DocPage({ day }) {
                                 ))}
                             </div>
                             <h2 style={{
-                                fontSize: '6rem',
+                                fontSize: 'clamp(3rem, 12vw, 6rem)',
                                 fontWeight: 900,
                                 marginBottom: '1.5rem',
                                 background: 'linear-gradient(to right, #6366f1, #ec4899, #f59e0b)',
@@ -402,8 +402,8 @@ export default function DocPage({ day }) {
                             }}>
                                 BRILLIANT!
                             </h2>
-                            <p style={{ fontSize: '2rem', color: '#fff', fontWeight: 700, marginBottom: '0.5rem' }}>Section Mastered Successfully</p>
-                            <p style={{ fontSize: '1.2rem', color: 'rgba(255,255,255,0.6)' }}>Keep that momentum going!</p>
+                            <p style={{ fontSize: 'clamp(1.5rem, 5vw, 2rem)', color: '#fff', fontWeight: 700, marginBottom: '0.5rem' }}>Section Mastered Successfully</p>
+                            <p style={{ fontSize: 'clamp(1rem, 3vw, 1.2rem)', color: 'rgba(255,255,255,0.6)' }}>Keep that momentum going!</p>
                         </motion.div>
                     </motion.div>
                 )}
