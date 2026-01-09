@@ -1,11 +1,28 @@
 import React from 'react';
 import { Briefcase } from 'lucide-react';
 
-export default function WorkplaceUsageCard({ day = 'day1' }) {
+export default function WorkplaceUsageCard({ day = 'day1', style = {} }) {
     const isDay1 = day === 'day1';
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
+
+    const responsiveCardStyle = {
+        background: 'var(--bg-primary)',
+        borderLeft: isMobile ? 'none' : '1px solid var(--border-color)',
+        borderBottom: isMobile ? '1px solid var(--border-color)' : 'none',
+        padding: isMobile ? '1.5rem 1rem' : '2rem 1.5rem',
+        height: isMobile ? 'auto' : 'calc(100vh - 60px)',
+        position: isMobile ? 'relative' : 'sticky',
+        top: isMobile ? '0' : '60px',
+        overflowY: isMobile ? 'visible' : 'auto',
+        width: isMobile ? '100%' : '320px',
+        flexShrink: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        ...style
+    };
 
     return (
-        <div style={cardStyle}>
+        <div style={responsiveCardStyle}>
             <div style={{ marginBottom: '2rem' }}>
                 <h3 style={{
                     fontSize: '1.3rem',
@@ -200,16 +217,4 @@ export default function WorkplaceUsageCard({ day = 'day1' }) {
     );
 }
 
-const cardStyle = {
-    background: 'var(--bg-primary)',
-    borderLeft: '1px solid var(--border-color)',
-    padding: '2rem 1.5rem',
-    height: 'calc(100vh - 60px)',
-    position: 'sticky',
-    top: '60px',
-    overflowY: 'auto',
-    width: '320px',
-    flexShrink: 0,
-    display: 'flex',
-    flexDirection: 'column'
-};
+

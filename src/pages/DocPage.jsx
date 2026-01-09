@@ -747,7 +747,13 @@ export default function DocPage({ day }) {
                     </footer>
                 </main>
 
-                <WorkplaceUsageCard day={day} />
+                <WorkplaceUsageCard
+                    day={day}
+                    style={{
+                        order: window.innerWidth < 1024 ? -1 : 0,
+                        marginBottom: window.innerWidth < 1024 ? '2rem' : '0'
+                    }}
+                />
 
                 {/* Outcome Survey Modal */}
                 <OutcomeSurveyModal
