@@ -157,13 +157,15 @@ export default function GsapHero() {
     return (
         <div ref={component} style={{
             position: 'relative',
-            height: '100vh',
+            minHeight: '100vh',
             width: '100%',
             overflow: 'hidden',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'var(--bg-primary)'
+            background: 'var(--bg-primary)',
+            paddingTop: 'clamp(4rem, 8vh, 6rem)',
+            paddingBottom: 'clamp(2rem, 4vh, 3rem)'
         }}>
             {/* Canvas Background */}
             <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }} />
@@ -172,9 +174,10 @@ export default function GsapHero() {
             <div style={{
                 maxWidth: '1400px',
                 margin: '0 auto',
-                padding: '0 2rem',
+                padding: '0 clamp(1rem, 4vw, 2rem)',
                 position: 'relative',
-                zIndex: 1
+                zIndex: 1,
+                width: '100%'
             }}>
 
                 {/* Inline CSS for animations */}
@@ -246,8 +249,9 @@ export default function GsapHero() {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: '2.5rem',
-                    marginBottom: '4rem'
+                    gap: 'clamp(1.5rem, 4vw, 2.5rem)',
+                    marginBottom: 'clamp(2rem, 6vw, 4rem)',
+                    textAlign: 'center'
                 }}>
                     <h1 style={{
                         fontSize: 'clamp(1.5rem, 3vw, 2rem)',
@@ -277,14 +281,15 @@ export default function GsapHero() {
 
                     {/* Simple Tagline */}
                     <p style={{
-                        fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
+                        fontSize: 'clamp(1rem, 3vw, 1.75rem)',
                         fontWeight: 600,
                         color: '#1a1a1a',
                         letterSpacing: '-0.02em',
                         lineHeight: 1.5,
                         margin: 0,
                         textAlign: 'center',
-                        maxWidth: '700px'
+                        maxWidth: '700px',
+                        padding: '0 1rem'
                     }}>
                         Future-proof your career—
                         <br />
@@ -300,8 +305,8 @@ export default function GsapHero() {
                 {/* Feature Boxes - Auto Horizontal Scroll */}
                 <div style={{
                     width: '100%',
-                    marginTop: '3.5rem',
-                    marginBottom: '2rem',
+                    marginTop: 'clamp(2rem, 5vw, 3.5rem)',
+                    marginBottom: 'clamp(1.5rem, 3vw, 2rem)',
                     position: 'relative',
                     overflow: 'hidden'
                 }}>
@@ -326,19 +331,19 @@ export default function GsapHero() {
                                 style={{
                                     background: 'linear-gradient(135deg, #FFFFFF 0%, #FFFEF8 100%)',
                                     border: '2px solid rgba(255, 170, 2, 0.15)',
-                                    borderRadius: '24px',
-                                    padding: '2.5rem 2rem',
+                                    borderRadius: 'clamp(16px, 3vw, 24px)',
+                                    padding: 'clamp(1.5rem, 4vw, 2.5rem) clamp(1.25rem, 3vw, 2rem)',
                                     textAlign: 'center',
                                     transition: 'all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1)',
                                     cursor: 'default',
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'center',
-                                    gap: '1rem',
+                                    gap: 'clamp(0.75rem, 2vw, 1rem)',
                                     position: 'relative',
                                     boxShadow: '0 8px 30px rgba(255, 170, 2, 0.08)',
                                     overflow: 'hidden',
-                                    minWidth: '280px',
+                                    minWidth: 'clamp(240px, 60vw, 280px)',
                                     flex: '0 0 auto'
                                 }}
                                 onMouseEnter={(e) => {
@@ -413,19 +418,19 @@ export default function GsapHero() {
                                 style={{
                                     background: 'linear-gradient(135deg, #FFFFFF 0%, #FFFEF8 100%)',
                                     border: '2px solid rgba(255, 170, 2, 0.15)',
-                                    borderRadius: '24px',
-                                    padding: '2.5rem 2rem',
+                                    borderRadius: 'clamp(16px, 3vw, 24px)',
+                                    padding: 'clamp(1.5rem, 4vw, 2.5rem) clamp(1.25rem, 3vw, 2rem)',
                                     textAlign: 'center',
                                     transition: 'all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1)',
                                     cursor: 'default',
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'center',
-                                    gap: '1rem',
+                                    gap: 'clamp(0.75rem, 2vw, 1rem)',
                                     position: 'relative',
                                     boxShadow: '0 8px 30px rgba(255, 170, 2, 0.08)',
                                     overflow: 'hidden',
-                                    minWidth: '280px',
+                                    minWidth: 'clamp(240px, 60vw, 280px)',
                                     flex: '0 0 auto'
                                 }}
                                 onMouseEnter={(e) => {
@@ -489,7 +494,13 @@ export default function GsapHero() {
                     </div>
                 </div>
 
-                <div style={{ marginTop: '3rem', position: 'relative', display: 'inline-block' }}>
+                <div style={{
+                    marginTop: 'clamp(2rem, 4vw, 3rem)',
+                    position: 'relative',
+                    display: 'inline-block',
+                    width: '100%',
+                    maxWidth: '400px'
+                }}>
                     {/* Pulsing glow ring */}
                     <div style={{
                         position: 'absolute',
@@ -508,12 +519,13 @@ export default function GsapHero() {
                         style={{
                             background: 'linear-gradient(135deg, #FFAA02 0%, #FF8C00 100%)',
                             color: '#000',
-                            padding: '1.25rem 3.5rem',
+                            padding: 'clamp(1rem, 2.5vw, 1.25rem) clamp(2rem, 6vw, 3.5rem)',
                             borderRadius: '50px',
-                            fontSize: '1.35rem',
+                            fontSize: 'clamp(1.1rem, 2.5vw, 1.35rem)',
                             fontWeight: 800,
                             border: 'none',
                             cursor: 'pointer',
+                            width: '100%',
                             display: 'inline-flex',
                             alignItems: 'center',
                             gap: '0.8rem',
