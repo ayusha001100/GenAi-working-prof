@@ -164,7 +164,7 @@ export default function GsapHero() {
             alignItems: 'center',
             justifyContent: 'center',
             background: 'var(--bg-primary)',
-            paddingTop: 'clamp(4rem, 8vh, 6rem)',
+            paddingTop: 'clamp(7rem, 12vh, 9rem)',
             paddingBottom: 'clamp(2rem, 4vh, 3rem)'
         }}>
             {/* Canvas Background */}
