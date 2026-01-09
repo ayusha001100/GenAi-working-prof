@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Sparkles, Zap, Target, TrendingUp, Rocket, Repeat, Crown, BrainCircuit } from 'lucide-react';
+import { ArrowRight, Sparkles, Zap, Target, TrendingUp, Rocket, Repeat, Crown, BrainCircuit, Map, FileCode, UserCheck, MessageSquare, Users } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import LogoTicker from './LogoTicker';
 
@@ -244,94 +244,96 @@ export default function GsapHero() {
 
 
 
-                {/* Reasons / Feature Boxes */}
-                {/* Reasons / Feature Boxes */}
+                {/* Feature Boxes - Horizontal Scroll */}
                 <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(4, 1fr)',
-                    gap: '1.5rem',
                     width: '100%',
                     marginTop: '3.5rem',
-                    marginBottom: '2rem'
+                    marginBottom: '2rem',
+                    position: 'relative'
                 }}>
-                    {[
-                        { icon: <Rocket size={32} color="#FFAA02" />, title: "Accelerate", desc: "Fast career growth" },
-                        { icon: <Repeat size={32} color="#FFAA02" />, title: "Transform", desc: "Career change" },
-                        { icon: <Crown size={32} color="#FFAA02" />, title: "Mastery", desc: "Deep expertise" },
-                        { icon: <BrainCircuit size={32} color="#FFAA02" />, title: "Adapt", desc: "Future readiness" }
-                    ].map((item, index) => (
-                        <div key={index}
-                            className="feature-card"
-                            style={{
-                                background: '#FFFFFF',
-                                border: '1px solid rgba(255, 170, 2, 0.1)',
-                                borderRadius: '24px',
-                                padding: '2.5rem 1.5rem',
-                                textAlign: 'center',
-                                transition: 'all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)',
-                                cursor: 'default',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                gap: '1rem',
-                                position: 'relative',
-                                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.02)',
-                                overflow: 'hidden'
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-8px)';
-                                e.currentTarget.style.boxShadow = '0 20px 40px -5px rgba(255, 170, 2, 0.15)';
-                                e.currentTarget.style.border = '1px solid rgba(255, 170, 2, 0.4)';
-                                const iconContainer = e.currentTarget.querySelector('.icon-container');
-                                if (iconContainer) {
-                                    iconContainer.style.transform = 'scale(1.1) rotate(5deg)';
-                                    iconContainer.style.background = 'rgba(255, 170, 2, 0.15)';
-                                }
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.02)';
-                                e.currentTarget.style.border = '1px solid rgba(255, 170, 2, 0.1)';
-                                const iconContainer = e.currentTarget.querySelector('.icon-container');
-                                if (iconContainer) {
-                                    iconContainer.style.transform = 'scale(1) rotate(0deg)';
-                                    iconContainer.style.background = 'rgba(255, 170, 2, 0.08)';
-                                }
-                            }}
-                        >
-                            <div className="icon-container" style={{
-                                background: 'rgba(255, 170, 2, 0.08)',
-                                width: '72px',
-                                height: '72px',
-                                borderRadius: '50%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                                marginBottom: '0.5rem'
-                            }}>
-                                {item.icon}
+                    <div style={{
+                        display: 'flex',
+                        gap: '1.5rem',
+                        overflowX: 'auto',
+                        overflowY: 'hidden',
+                        scrollBehavior: 'smooth',
+                        padding: '1rem 0',
+                        WebkitOverflowScrolling: 'touch',
+                        scrollbarWidth: 'none', // Firefox
+                        msOverflowStyle: 'none', // IE/Edge
+                    }}
+                        className="horizontal-scroll"
+                    >
+                        {[
+                            { icon: <Map size={28} color="#FFAA02" />, title: "Personalized Roadmap", desc: "Tailored learning path" },
+                            { icon: <FileCode size={28} color="#FFAA02" />, title: "Proof-of-Work Projects", desc: "Build real portfolio" },
+                            { icon: <UserCheck size={28} color="#FFAA02" />, title: "Resume + LinkedIn Upgrade", desc: "Stand out professionally" },
+                            { icon: <MessageSquare size={28} color="#FFAA02" />, title: "Interview Prep + Mentors", desc: "Expert guidance" },
+                            { icon: <Users size={28} color="#FFAA02" />, title: "Community + Weekly Sprints", desc: "Learn together" }
+                        ].map((item, index) => (
+                            <div key={index}
+                                className="feature-card"
+                                style={{
+                                    background: '#FFFFFF',
+                                    border: '1px solid rgba(255, 170, 2, 0.1)',
+                                    borderRadius: '24px',
+                                    padding: '2rem 1.8rem',
+                                    textAlign: 'center',
+                                    transition: 'all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)',
+                                    cursor: 'default',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '1rem',
+                                    position: 'relative',
+                                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.02)',
+                                    overflow: 'hidden',
+                                    minWidth: '280px',
+                                    flex: '0 0 auto'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(-8px) scale(1.02)';
+                                    e.currentTarget.style.boxShadow = '0 20px 40px rgba(255, 170, 2, 0.15)';
+                                    e.currentTarget.style.borderColor = 'rgba(255, 170, 2, 0.3)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                                    e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.02)';
+                                    e.currentTarget.style.borderColor = 'rgba(255, 170, 2, 0.1)';
+                                }}
+                            >
+                                <div style={{
+                                    width: '64px',
+                                    height: '64px',
+                                    background: 'rgba(255, 170, 2, 0.08)',
+                                    borderRadius: '16px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    transition: 'all 0.3s'
+                                }}>
+                                    {item.icon}
+                                </div>
+                                <h3 style={{
+                                    fontSize: '1.1rem',
+                                    fontWeight: 700,
+                                    color: '#1a1a1a',
+                                    margin: 0,
+                                    lineHeight: 1.3
+                                }}>
+                                    {item.title}
+                                </h3>
+                                <p style={{
+                                    fontSize: '0.9rem',
+                                    color: '#666',
+                                    margin: 0,
+                                    lineHeight: 1.5
+                                }}>
+                                    {item.desc}
+                                </p>
                             </div>
-                            <h3 style={{
-                                fontSize: '1.5rem',
-                                fontWeight: 800,
-                                margin: 0,
-                                color: 'var(--text-primary)',
-                                letterSpacing: '-0.02em'
-                            }}>
-                                {item.title}
-                            </h3>
-                            <p style={{
-                                fontSize: '1.1rem',
-                                color: 'var(--text-secondary)',
-                                margin: 0,
-                                lineHeight: 1.4,
-                                fontWeight: 500
-                            }}>
-                                {item.desc}
-                            </p>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
 
                 <div style={{ marginTop: '3rem' }}>
