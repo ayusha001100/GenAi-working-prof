@@ -202,7 +202,9 @@ export default function DocPage({ day }) {
     const day2Finished = day2Content.every(s => completedSections.includes(s.id));
 
     const isLocked = (index) => {
-        return false; // Unlock all for now
+        if (index === 0) return false;
+        const prevSectionId = content[index - 1].id;
+        return !completedSections.includes(prevSectionId);
     };
 
     const handleSectionComplete = (sectionId, correct, incorrect) => {
@@ -538,6 +540,38 @@ export default function DocPage({ day }) {
                                     position: 'relative'
                                 }}
                             >
+                                {locked && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '200px',
+                                        left: '50%',
+                                        transform: 'translateX(-50%)',
+                                        zIndex: 10,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        background: 'rgba(0,0,0,0.7)',
+                                        padding: '2rem 3rem',
+                                        borderRadius: '24px',
+                                        backdropFilter: 'blur(8px)',
+                                        border: '1px solid rgba(255,255,255,0.1)',
+                                        boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
+                                    }}>
+                                        <div style={{
+                                            background: 'rgba(255,255,255,0.1)',
+                                            padding: '1rem',
+                                            borderRadius: '50%',
+                                            marginBottom: '1rem',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}>
+                                            <Lock size={32} color="white" />
+                                        </div>
+                                        <span style={{ color: 'white', fontWeight: 700, fontSize: '1.2rem', letterSpacing: '-0.02em', marginBottom: '0.5rem' }}>Module Locked</span>
+                                        <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.95rem' }}>Complete the previous module to unlock</span>
+                                    </div>
+                                )}
                                 {/* Content Wrapper - Blur is applied ONLY here */}
                                 <div style={{
                                     opacity: locked ? 0.4 : 1,
