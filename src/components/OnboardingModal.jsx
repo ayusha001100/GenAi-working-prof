@@ -408,7 +408,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
 
                         {step === 5 && (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                <p style={{ color: '#a1a1aa', marginBottom: '1rem', fontSize: '0.95rem' }}>Your current annual CTC range:</p>
+                                <p style={{ color: isDark ? '#a1a1aa' : '#666', marginBottom: '1rem', fontSize: '0.95rem' }}>Your current annual CTC range:</p>
                                 {CTC_RANGES.map((range) => (
                                     <button
                                         key={range}
@@ -418,11 +418,11 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                             borderRadius: '16px',
                                             background: formData.ctc === range
                                                 ? 'linear-gradient(90deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.02))'
-                                                : 'rgba(255, 255, 255, 0.02)',
+                                                : (isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.04)'),
                                             border: formData.ctc === range
                                                 ? '1px solid #10b981'
-                                                : '1px solid rgba(255, 255, 255, 0.06)',
-                                            color: formData.ctc === range ? '#10b981' : 'white',
+                                                : (isDark ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(0, 0, 0, 0.1)'),
+                                            color: formData.ctc === range ? '#10b981' : (isDark ? 'white' : '#1a1a1a'),
                                             textAlign: 'left',
                                             fontSize: '1.05rem',
                                             fontWeight: formData.ctc === range ? 600 : 400,
@@ -435,14 +435,14 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                         }}
                                         onMouseEnter={(e) => {
                                             if (formData.ctc !== range) {
-                                                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                                                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+                                                e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.08)';
+                                                e.currentTarget.style.borderColor = isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.2)';
                                             }
                                         }}
                                         onMouseLeave={(e) => {
                                             if (formData.ctc !== range) {
-                                                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
-                                                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.06)';
+                                                e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.04)';
+                                                e.currentTarget.style.borderColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.1)';
                                             }
                                         }}
                                     >
@@ -465,8 +465,8 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                     style={{
                                         padding: '1rem',
                                         borderRadius: '16px',
-                                        background: formData.ctc ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : 'rgba(255,255,255,0.05)',
-                                        color: formData.ctc ? 'white' : 'rgba(255,255,255,0.2)',
+                                        background: formData.ctc ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'),
+                                        color: formData.ctc ? 'white' : (isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.3)'),
                                         border: 'none',
                                         cursor: (formData.ctc && !loading) ? 'pointer' : 'not-allowed',
                                         fontWeight: 700,
