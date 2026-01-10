@@ -299,6 +299,13 @@ export default function DocPage({ day }) {
             setTimeout(() => {
                 setShowWow(false);
 
+                // Auto-advance to next module
+                const currentIndex = content.findIndex(s => s.id === sectionId);
+                if (currentIndex !== -1 && currentIndex < content.length - 1) {
+                    const nextModule = content[currentIndex + 1];
+                    setActiveId(nextModule.id);
+                }
+
                 // Module 1: Outcome Survey
                 if (day === 'day1' && sectionId === 'intro-basics') {
                     const surveyDone = userData?.surveys?.outcome_survey;

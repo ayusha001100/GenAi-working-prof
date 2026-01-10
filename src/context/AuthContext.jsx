@@ -10,6 +10,7 @@ import {
     doc,
     getDoc,
     setDoc,
+    onSnapshot,
     serverTimestamp
 } from 'firebase/firestore';
 
@@ -21,35 +22,53 @@ export const AuthProvider = ({ children }) => {
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+        let unsubscribeSnapshot = null;
+
+        const unsubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
             setUser(currentUser);
 
+            // Clean up previous snapshot listener if it exists
+            if (unsubscribeSnapshot) {
+                unsubscribeSnapshot();
+                unsubscribeSnapshot = null;
+            }
+
             if (currentUser) {
-                // Fetch extra user data from Firestore
-                const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-                if (userDoc.exists()) {
-                    setUserData(userDoc.data());
-                } else {
-                    // Initialize new user data if it doesn't exist
-                    const newData = {
-                        uid: currentUser.uid,
-                        email: currentUser.email,
-                        name: currentUser.displayName,
-                        createdAt: serverTimestamp(),
-                        progress: { completedSections: [] },
-                        stats: { totalPoints: 0, totalCorrect: 0, totalIncorrect: 0 },
-                        role: 'user'
-                    };
-                    await setDoc(doc(db, 'users', currentUser.uid), newData);
-                    setUserData(newData);
-                }
+                // Setup Real-time Listener for User Data
+                const userRef = doc(db, 'users', currentUser.uid);
+
+                unsubscribeSnapshot = onSnapshot(userRef, async (docSnap) => {
+                    if (docSnap.exists()) {
+                        setUserData(docSnap.data());
+                    } else {
+                        // Initialize new user data if it doesn't exist
+                        const newData = {
+                            uid: currentUser.uid,
+                            email: currentUser.email,
+                            name: currentUser.displayName,
+                            createdAt: serverTimestamp(),
+                            progress: { completedSections: [] },
+                            stats: { totalPoints: 0, totalCorrect: 0, totalIncorrect: 0 },
+                            role: 'user'
+                        };
+                        await setDoc(userRef, newData);
+                        // setDoc will trigger the snapshot listener again
+                    }
+                    setLoading(false);
+                }, (error) => {
+                    console.error("User snapshot error:", error);
+                    setLoading(false);
+                });
             } else {
                 setUserData(null);
+                setLoading(false);
             }
-            setLoading(false);
         });
 
-        return () => unsubscribe();
+        return () => {
+            unsubscribeAuth();
+            if (unsubscribeSnapshot) unsubscribeSnapshot();
+        };
     }, []);
 
     const loginWithGoogle = async () => {
