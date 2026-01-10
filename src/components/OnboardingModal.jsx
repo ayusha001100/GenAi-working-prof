@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Search, ChevronRight, Check } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { db } from '../config/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 
@@ -40,6 +41,8 @@ const CTC_RANGES = [
 
 export default function OnboardingModal({ isOpen, onClose, onComplete }) {
     const { user } = useAuth();
+    const { theme } = useTheme();
+    const isDark = theme === 'dark';
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
         profession: '',
@@ -123,13 +126,13 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                     animate={{ scale: 1, opacity: 1, y: 0 }}
                     exit={{ scale: 0.95, opacity: 0, y: 20 }}
                     style={{
-                        background: '#09090b', // Darker, more premium bg
+                        background: isDark ? '#09090b' : '#ffffff',
                         backgroundImage: 'radial-gradient(circle at top right, rgba(255, 87, 34, 0.08), transparent 40%)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
                         borderRadius: '24px',
                         width: '100%',
                         maxWidth: '500px',
-                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05)',
+                        boxShadow: isDark ? '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05)' : '0 25px 50px -12px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)',
                         position: 'relative'
                         // Removed overflow: hidden so dropdown can show
                     }}
@@ -137,11 +140,11 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                     {/* Header */}
                     <div style={{
                         padding: '1.5rem',
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                        borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.05)' : '1px solid rgba(0, 0, 0, 0.05)',
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        background: 'rgba(255, 255, 255, 0.02)',
+                        background: isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.02)',
                         borderTopLeftRadius: '24px',
                         borderTopRightRadius: '24px'
                     }}>
@@ -149,8 +152,8 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                             <h2 style={{
                                 fontSize: '1.25rem',
                                 fontWeight: 700,
-                                color: 'white',
-                                background: 'linear-gradient(to right, #fff, #a1a1aa)',
+                                color: isDark ? 'white' : '#1a1a1a',
+                                background: isDark ? 'linear-gradient(to right, #fff, #a1a1aa)' : 'linear-gradient(to right, #1a1a1a, #5c5c5c)',
                                 WebkitBackgroundClip: 'text',
                                 WebkitTextFillColor: 'transparent',
                                 marginBottom: '0.25rem'
@@ -189,7 +192,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                     <div style={{ padding: '2rem' }}>
                         {step === 1 && (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                <p style={{ color: '#a1a1aa', marginBottom: '1rem' }}>You are currently:</p>
+                                <p style={{ color: isDark ? '#a1a1aa' : '#5c5c5c', marginBottom: '1rem' }}>You are currently:</p>
                                 {['Student', 'Fresher', 'Working Professional'].map((item) => (
                                     <button
                                         key={item}
@@ -197,9 +200,9 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                         style={{
                                             padding: '1rem',
                                             borderRadius: '12px',
-                                            background: 'rgba(255, 255, 255, 0.03)',
-                                            border: '1px solid rgba(255, 255, 255, 0.1)',
-                                            color: 'white',
+                                            background: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.04)',
+                                            border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
+                                            color: isDark ? 'white' : '#1a1a1a',
                                             textAlign: 'left',
                                             fontSize: '1rem',
                                             cursor: 'pointer',
@@ -213,12 +216,12 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                             e.currentTarget.style.borderColor = '#FF5722';
                                         }}
                                         onMouseLeave={(e) => {
-                                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
-                                            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                                            e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.04)';
+                                            e.currentTarget.style.borderColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
                                         }}
                                     >
                                         {item}
-                                        <ChevronRight size={18} color="#a1a1aa" />
+                                        <ChevronRight size={18} color={isDark ? "#a1a1aa" : "#5c5c5c"} />
                                     </button>
                                 ))}
                             </div>
@@ -238,10 +241,10 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                         style={{
                                             width: '100%',
                                             padding: '0.875rem',
-                                            background: 'rgba(0, 0, 0, 0.3)',
-                                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                                            background: isDark ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.05)',
+                                            border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
                                             borderRadius: '10px',
-                                            color: 'white',
+                                            color: isDark ? 'white' : '#1a1a1a',
                                             outline: 'none',
                                             fontSize: '1rem'
                                         }}
@@ -253,8 +256,8 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                     style={{
                                         padding: '1rem',
                                         borderRadius: '12px',
-                                        background: formData.organization ? '#FF5722' : 'rgba(255,255,255,0.1)',
-                                        color: formData.organization ? 'white' : 'rgba(255,255,255,0.3)',
+                                        background: formData.organization ? '#FF5722' : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'),
+                                        color: formData.organization ? 'white' : (isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)'),
                                         border: 'none',
                                         cursor: formData.organization ? 'pointer' : 'not-allowed',
                                         fontWeight: 600,
@@ -307,10 +310,10 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                         onClick={() => setShowRoleDropdown(!showRoleDropdown)}
                                         style={{
                                             padding: '0.875rem',
-                                            background: 'rgba(0, 0, 0, 0.3)',
-                                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                                            background: isDark ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.05)',
+                                            border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
                                             borderRadius: '10px',
-                                            color: formData.role ? 'white' : '#666',
+                                            color: formData.role ? (isDark ? 'white' : '#1a1a1a') : '#666',
                                             cursor: 'pointer',
                                             display: 'flex',
                                             justifyContent: 'space-between',
