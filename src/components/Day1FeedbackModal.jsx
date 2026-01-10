@@ -3,11 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Check, X, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { db } from '../config/firebase';
-import { doc, setDoc } from 'firebase/firestore';
 
 export default function Day1FeedbackModal({ isOpen, onClose, onComplete }) {
-    const { user } = useAuth();
+    const { user, userData, setUserData } = useAuth();
     const { theme } = useTheme();
     const isDark = theme === 'dark';
     const [step, setStep] = useState(1);
@@ -18,7 +16,6 @@ export default function Day1FeedbackModal({ isOpen, onClose, onComplete }) {
         interestedInPaid: null // 'Yes', 'No', 'Maybe'
     });
 
-    const { userData } = useAuth();
     const [initialized, setInitialized] = useState(false);
 
     useEffect(() => {
@@ -45,11 +42,15 @@ export default function Day1FeedbackModal({ isOpen, onClose, onComplete }) {
     const saveProgress = (data) => {
         if (user) {
             const finalData = { rating, ...data };
-            setDoc(doc(db, 'users', user.uid), {
+            const updatedUserData = {
+                ...userData,
                 surveys: {
+                    ...userData?.surveys,
                     day1_feedback: finalData
                 }
-            }, { merge: true }).catch(e => console.error("Autosave error:", e));
+            };
+            setUserData(updatedUserData);
+            localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
         }
     };
 
@@ -69,14 +70,19 @@ export default function Day1FeedbackModal({ isOpen, onClose, onComplete }) {
     const handleComplete = () => {
         const finalData = { rating, ...formData };
         if (user) {
-            setDoc(doc(db, 'users', user.uid), {
+            const updatedUserData = {
+                ...userData,
                 surveys: {
+                    ...userData?.surveys,
                     day1_feedback: finalData
                 }
-            }, { merge: true }).catch(e => console.error("Error saving feedback:", e));
+            };
+            setUserData(updatedUserData);
+            localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
         }
         onComplete();
     };
+
 
     if (!isOpen) return null;
 

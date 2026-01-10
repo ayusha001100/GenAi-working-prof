@@ -4,8 +4,6 @@ import { Lock, Save, Calendar, Video, User, Check, Loader2, ArrowLeft } from 'lu
 import { useNavigate } from 'react-router-dom';
 import ThemeToggle from '../components/ThemeToggle';
 import { useTheme } from '../context/ThemeContext';
-import { db } from '../config/firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 export default function SessionAdminPage() {
     const navigate = useNavigate();
@@ -63,10 +61,9 @@ export default function SessionAdminPage() {
     const fetchConfig = async () => {
         setFetching(true);
         try {
-            const docRef = doc(db, 'config', 'liveSession');
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                setSessionData(docSnap.data());
+            const savedConfig = localStorage.getItem('live_session_config');
+            if (savedConfig) {
+                setSessionData(JSON.parse(savedConfig));
             }
         } catch (error) {
             console.error("Error fetching config:", error);
@@ -91,16 +88,17 @@ export default function SessionAdminPage() {
     const handleSave = async () => {
         setLoading(true);
         try {
-            await setDoc(doc(db, 'config', 'liveSession'), sessionData);
+            localStorage.setItem('live_session_config', JSON.stringify(sessionData));
             setSuccess(true);
             setTimeout(() => setSuccess(false), 2000);
         } catch (error) {
             console.error("Error saving config:", error);
-            alert("Failed to save changes. Check permissions.");
+            alert("Failed to save changes.");
         } finally {
             setLoading(false);
         }
     };
+
 
     const updateField = (section, field, value) => {
         // Handle nested mentor update

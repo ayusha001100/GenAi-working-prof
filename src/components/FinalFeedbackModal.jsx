@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, X, Award, CheckCircle2, ChevronRight, MessageSquare, Trophy } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { db } from '../config/firebase';
-import { doc, setDoc } from 'firebase/firestore';
 
 export default function FinalFeedbackModal({ isOpen, onClose, onComplete }) {
-    const { user } = useAuth();
+    const { user, userData, setUserData } = useAuth();
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
         overallRating: 0,
@@ -32,13 +30,17 @@ export default function FinalFeedbackModal({ isOpen, onClose, onComplete }) {
         setSubmitting(true);
 
         if (user) {
-            setDoc(doc(db, 'users', user.uid), {
+            const updatedUserData = {
+                ...userData,
                 surveys: {
+                    ...userData?.surveys,
                     program_feedback: formData,
                     certificate_unlocked: true,
                     certificateDate: new Date().toISOString()
                 }
-            }, { merge: true }).catch(e => console.error("Error saving final feedback:", e));
+            };
+            setUserData(updatedUserData);
+            localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
         }
 
         setTimeout(() => {
@@ -46,6 +48,7 @@ export default function FinalFeedbackModal({ isOpen, onClose, onComplete }) {
             onComplete();
         }, 1500);
     };
+
 
     if (!isOpen) return null;
 

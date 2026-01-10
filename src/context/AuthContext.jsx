@@ -1,10 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
-import { auth, db, googleProvider, signInWithPopup, signOut } from '../config/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 const AuthContext = createContext(null);
+
+// Mock user for local development
+const MOCK_USER = {
+    uid: 'local-user-id',
+    email: 'local@example.com',
+    displayName: 'Local User',
+    photoURL: 'https://ui-avatars.com/api/?name=Local+User'
+};
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -12,85 +17,50 @@ export const AuthProvider = ({ children }) => {
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        // Safety timeout to prevent infinite loading/black screen
-        const safetyTimer = setTimeout(() => {
-            console.warn("Auth loading timed out, forcing render");
-            setLoading(false);
-        }, 2500);
-
-        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-            setUser(currentUser);
-            if (currentUser) {
-                try {
-                    const userRef = doc(db, 'users', currentUser.uid);
-                    const userSnap = await getDoc(userRef);
-
-                    if (userSnap.exists()) {
-                        setUserData(userSnap.data());
-                    } else {
-                        // Create new user doc
-                        const localName = localStorage.getItem('user_name');
-                        const localPhone = localStorage.getItem('user_phone');
-                        const newUser = {
-                            uid: currentUser.uid,
-                            email: currentUser.email,
-                            name: localName || currentUser.displayName || currentUser.email.split('@')[0],
-                            phone: localPhone || '',
-                            photoURL: currentUser.photoURL,
-                            createdAt: serverTimestamp(),
-                            progress: { completedSections: [] },
-                            stats: { totalPoints: 0, totalCorrect: 0, totalIncorrect: 0 },
-                            role: 'user'
-                        };
-                        await setDoc(userRef, newUser);
-                        setUserData(newUser);
-                    }
-                } catch (error) {
-                    console.error("Error fetching user data:", error);
-                    // Fallback to avoid crash
-                    setUserData({
-                        uid: currentUser.uid,
-                        email: currentUser.email,
-                        progress: { completedSections: [] },
-                        stats: { correct: 0, incorrect: 0 }
-                    });
-                }
-            } else {
-                setUserData(null);
-            }
-            clearTimeout(safetyTimer); // Clear safety timer on success
-            setLoading(false);
-        });
-
-        return () => {
-            unsubscribe();
-            clearTimeout(safetyTimer);
-        };
+        // Load user from localStorage on mount
+        const savedUser = localStorage.getItem('mock_user');
+        const savedUserData = localStorage.getItem('mock_user_data');
+        
+        if (savedUser) {
+            setUser(JSON.parse(savedUser));
+        }
+        if (savedUserData) {
+            setUserData(JSON.parse(savedUserData));
+        }
+        
+        setLoading(false);
     }, []);
 
     const loginWithGoogle = async () => {
-        try {
-            const result = await signInWithPopup(auth, googleProvider);
-            return result.user;
-        } catch (error) {
-            console.error("Google Sign-in Error:", error);
-            throw error;
-        }
+        // Mock Google login
+        setUser(MOCK_USER);
+        localStorage.setItem('mock_user', JSON.stringify(MOCK_USER));
+        
+        const initialUserData = {
+            uid: MOCK_USER.uid,
+            email: MOCK_USER.email,
+            name: MOCK_USER.displayName,
+            photoURL: MOCK_USER.photoURL,
+            createdAt: new Date().toISOString(),
+            progress: { completedSections: [] },
+            stats: { totalPoints: 0, totalCorrect: 0, totalIncorrect: 0 },
+            role: 'user'
+        };
+        
+        setUserData(initialUserData);
+        localStorage.setItem('mock_user_data', JSON.stringify(initialUserData));
+        return MOCK_USER;
     };
 
     const logout = async () => {
-        try {
-            await signOut(auth);
-            setUser(null);
-            setUserData(null);
-            localStorage.removeItem('user_name');
-            localStorage.removeItem('user_phone');
-        } catch (error) {
-            console.error("Logout Error:", error);
-        }
+        setUser(null);
+        setUserData(null);
+        localStorage.removeItem('mock_user');
+        localStorage.removeItem('mock_user_data');
+        localStorage.removeItem('user_name');
+        localStorage.removeItem('user_phone');
     };
 
-    // Dummy functions for compatibility if app uses email/pass elsewhere
     const login = async () => console.warn("Email login not implemented in this version");
     const signup = async () => console.warn("Email signup not implemented in this version");
 
@@ -102,7 +72,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         login,
         signup,
-        setUserData // Exposing this to allow updates if needed
+        setUserData
     };
 
     return (
@@ -126,3 +96,4 @@ export const ProtectedRoute = ({ children }) => {
 
     return children;
 };
+

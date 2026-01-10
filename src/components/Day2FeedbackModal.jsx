@@ -3,11 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Check, X, ArrowRight, MessageSquare } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { db } from '../config/firebase';
-import { doc, setDoc } from 'firebase/firestore';
 
 export default function Day2FeedbackModal({ isOpen, onClose, onComplete }) {
-    const { user } = useAuth();
+    const { user, userData, setUserData } = useAuth();
     const { theme } = useTheme();
     const isDark = theme === 'dark';
     const [step, setStep] = useState(1);
@@ -27,11 +25,15 @@ export default function Day2FeedbackModal({ isOpen, onClose, onComplete }) {
 
         const feedbackData = { rating, feedback };
         if (user) {
-            setDoc(doc(db, 'users', user.uid), {
+            const updatedUserData = {
+                ...userData,
                 surveys: {
+                    ...userData?.surveys,
                     day2_feedback: feedbackData
                 }
-            }, { merge: true }).catch(e => console.error("Error saving day 2 feedback:", e));
+            };
+            setUserData(updatedUserData);
+            localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
         }
 
         setTimeout(() => {
@@ -39,6 +41,7 @@ export default function Day2FeedbackModal({ isOpen, onClose, onComplete }) {
             onComplete();
         }, 1000);
     };
+
 
     if (!isOpen) return null;
 

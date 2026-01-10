@@ -3,10 +3,9 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, MapPin, CreditCard, ShieldCheck, Mail, CheckCircle } from 'lucide-react';
-import { db } from '../config/firebase';
-import { doc, setDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export default function HardcopyPage() {
+
     const { user, userData } = useAuth();
     const navigate = useNavigate();
     const [step, setStep] = useState(1); // 1: Details, 2: Payment/Success
@@ -62,20 +61,18 @@ export default function HardcopyPage() {
                 setPaymentStatus('success');
                 setStep(2);
 
-                // Save Order to Firestore
-                try {
-                    await addDoc(collection(db, 'orders'), {
-                        userId: user.uid,
-                        type: 'hardcopy_certificate',
-                        amount: 399,
-                        paymentId: response.razorpay_payment_id,
-                        shippingDetails: formData,
-                        status: 'paid',
-                        createdAt: serverTimestamp()
-                    });
-                } catch (error) {
-                    console.error("Error saving order:", error);
-                }
+                // Save Order Locally (Mock)
+                const orders = JSON.parse(localStorage.getItem('mock_orders') || '[]');
+                orders.push({
+                    userId: user.uid,
+                    type: 'hardcopy_certificate',
+                    amount: 399,
+                    paymentId: response.razorpay_payment_id,
+                    shippingDetails: formData,
+                    status: 'paid',
+                    createdAt: new Date().toISOString()
+                });
+                localStorage.setItem('mock_orders', JSON.stringify(orders));
             },
             prefill: {
                 name: formData.fullName,

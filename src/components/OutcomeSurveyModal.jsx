@@ -3,8 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Check } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { db } from '../config/firebase';
-import { doc, setDoc } from 'firebase/firestore';
 
 const OUTCOMES = [
     "Promotion",
@@ -15,13 +13,11 @@ const OUTCOMES = [
 ];
 
 export default function OutcomeSurveyModal({ isOpen, onClose, onComplete }) {
-    const { user } = useAuth();
+    const { user, userData, setUserData } = useAuth();
     const { theme } = useTheme();
     const isDark = theme === 'dark';
     const [selectedOutcome, setSelectedOutcome] = useState('');
     const [submitting, setSubmitting] = useState(false);
-
-    const { userData } = useAuth();
 
     // Sync with existing data
     useEffect(() => {
@@ -40,11 +36,15 @@ export default function OutcomeSurveyModal({ isOpen, onClose, onComplete }) {
         setSubmitting(true);
 
         if (user) {
-            setDoc(doc(db, 'users', user.uid), {
+            const updatedUserData = {
+                ...userData,
                 surveys: {
+                    ...userData?.surveys,
                     outcome_survey: selectedOutcome
                 }
-            }, { merge: true }).catch(e => console.error("Error saving outcome:", e));
+            };
+            setUserData(updatedUserData);
+            localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
         }
 
         setTimeout(() => {
@@ -52,6 +52,7 @@ export default function OutcomeSurveyModal({ isOpen, onClose, onComplete }) {
             onComplete();
         }, 1000);
     };
+
 
     if (!isOpen) return null;
 

@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { db } from '../config/firebase';
-import { doc, setDoc, updateDoc, arrayUnion, increment, getDoc } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
@@ -284,29 +282,7 @@ export default function DocPage({ day }) {
                 };
 
                 setUserData(updatedUserData); // Update Context locally
-
-                // Persist to Firestore with Atomic Updates
-                if (user) {
-                    const userRef = doc(db, 'users', user.uid);
-                    // Use atomic updates to prevent overwriting with stale data
-                    updateDoc(userRef, {
-                        'progress.completedSections': arrayUnion(sectionId),
-                        'stats.totalPoints': increment(pointsDelta),
-                        'stats.totalCorrect': increment(correct),
-                        'stats.totalIncorrect': increment(incorrect)
-                    }).catch(async (err) => {
-                        console.error("Atomic update failed, trying fallback:", err);
-                        // Fallback: Create doc if it doesn't exist (rare case)
-                        try {
-                            const snap = await getDoc(userRef);
-                            if (!snap.exists()) {
-                                await setDoc(userRef, updatedUserData);
-                            }
-                        } catch (e) {
-                            console.error("Critical Save Error:", e);
-                        }
-                    });
-                }
+                localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
             }
 
             // Visual Feedback

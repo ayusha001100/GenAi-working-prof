@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { db } from '../config/firebase';
-import { doc, setDoc } from 'firebase/firestore';
 
 export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
-    const { user } = useAuth();
+    const { user, userData, setUserData } = useAuth();
     const { theme } = useTheme();
     const isDark = theme === 'dark';
     const [step, setStep] = useState(1);
@@ -18,7 +16,6 @@ export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
         demoTime: '' // Morning, Afternoon, Evening
     });
 
-    const { userData } = useAuth();
     const [initialized, setInitialized] = useState(false);
 
     // Resume from saved progress
@@ -44,11 +41,15 @@ export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
 
     const saveProgress = (data) => {
         if (user) {
-            setDoc(doc(db, 'users', user.uid), {
+            const updatedUserData = {
+                ...userData,
                 surveys: {
+                    ...userData?.surveys,
                     org_fit_survey: data
                 }
-            }, { merge: true }).catch(e => console.error("Autosave error:", e));
+            };
+            setUserData(updatedUserData);
+            localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
         }
     };
 
@@ -75,14 +76,19 @@ export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
         console.log("Org Fit Survey Data:", formData);
 
         if (user) {
-            setDoc(doc(db, 'users', user.uid), {
+            const updatedUserData = {
+                ...userData,
                 surveys: {
+                    ...userData?.surveys,
                     org_fit_survey: formData
                 }
-            }, { merge: true }).catch(e => console.error("Error saving org fit:", e));
+            };
+            setUserData(updatedUserData);
+            localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
         }
         onComplete();
     };
+
 
     if (!isOpen) return null;
 

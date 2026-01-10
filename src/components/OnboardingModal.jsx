@@ -1,10 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Search, ChevronRight, Check } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { db } from '../config/firebase';
-import { doc, setDoc } from 'firebase/firestore';
 
 const JOB_ROLES = [
     "Account Executive", "Account Manager", "Accountant", "Administrative Assistant", "Agile Coach", "AI Engineer", "Android Developer", "Architect", "Art Director", "Attorney", "Auditor",
@@ -40,7 +38,7 @@ const CTC_RANGES = [
 ];
 
 export default function OnboardingModal({ isOpen, onClose, onComplete }) {
-    const { user } = useAuth();
+    const { user, userData, setUserData } = useAuth();
     const { theme } = useTheme();
     const isDark = theme === 'dark';
     const [step, setStep] = useState(1);
@@ -52,7 +50,6 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
         ctc: ''
     });
 
-    const { userData } = useAuth();
     const [initialized, setInitialized] = useState(false);
 
     // Resume from last saved step on mount
@@ -91,9 +88,12 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
 
     const saveProgress = (data) => {
         if (user) {
-            setDoc(doc(db, 'users', user.uid), {
+            const updatedUserData = {
+                ...userData,
                 onboarding: data
-            }, { merge: true }).catch(e => console.error("Autosave error:", e));
+            };
+            setUserData(updatedUserData);
+            localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
         }
     };
 
@@ -104,7 +104,6 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
         const newData = { ...formData, profession };
         setFormData(newData);
         saveProgress(newData);
-        saveProgress(newData); // Autosave
 
         if (profession === 'Student' || profession === 'Fresher') {
             // Skip remaining questions
@@ -120,12 +119,15 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
         setLoading(true);
         console.log("Survey Data:", finalData);
 
-        // Fire and forget DB save to prevent hanging
+        // Save progress locally
         if (user) {
-            setDoc(doc(db, 'users', user.uid), {
+            const updatedUserData = {
+                ...userData,
                 onboarding: finalData,
                 profile: finalData
-            }, { merge: true }).catch(e => console.error("Error saving onboarding:", e));
+            };
+            setUserData(updatedUserData);
+            localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
         }
 
         // Ensure we proceed after a short delay for UX
