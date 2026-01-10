@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { db } from '../config/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 
 export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
     const { user } = useAuth();
+    const { theme } = useTheme();
+    const isDark = theme === 'dark';
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
         usesLms: '', // Yes, No, Not sure
@@ -70,25 +73,25 @@ export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
                 <div style={{
                     width: '100%',
                     maxWidth: '500px',
-                    background: '#121212',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: isDark ? '#121212' : '#ffffff',
+                    border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
                     borderRadius: '24px',
                     overflow: 'hidden',
-                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+                    boxShadow: isDark ? '0 25px 50px -12px rgba(0, 0, 0, 0.5)' : '0 25px 40px rgba(0,0,0,0.1)'
                 }}>
                     {/* Header */}
                     <div style={{
                         padding: '1.5rem',
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                        borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.05)' : '1px solid rgba(0, 0, 0, 0.05)',
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center'
                     }}>
                         <div>
-                            <h2 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'white' }}>
+                            <h2 style={{ fontSize: '1.1rem', fontWeight: 600, color: isDark ? 'white' : '#1a1a1a' }}>
                                 Know Your Career Seeker
                             </h2>
-                            <p style={{ fontSize: '0.8rem', color: '#a1a1aa', marginTop: '0.2rem' }}>
+                            <p style={{ fontSize: '0.8rem', color: isDark ? '#a1a1aa' : '#666', marginTop: '0.2rem' }}>
                                 Quick intro—who are you?
                             </p>
                         </div>
@@ -111,7 +114,7 @@ export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
                         {/* Step 1: LMS Usage */}
                         {step === 1 && (
                             <div>
-                                <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', marginBottom: '1.5rem' }}>
+                                <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: isDark ? 'white' : '#1a1a1a', marginBottom: '1.5rem' }}>
                                     Does your organization currently use an LMS or LXP?
                                 </h3>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -125,9 +128,9 @@ export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
                                             style={{
                                                 padding: '1rem',
                                                 borderRadius: '12px',
-                                                background: formData.usesLms === opt ? 'rgba(244, 139, 54, 0.1)' : 'rgba(255, 255, 255, 0.03)',
-                                                border: formData.usesLms === opt ? '1px solid #F48B36' : '1px solid rgba(255, 255, 255, 0.1)',
-                                                color: 'white',
+                                                background: formData.usesLms === opt ? 'rgba(244, 139, 54, 0.1)' : (isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.05)'),
+                                                border: formData.usesLms === opt ? '1px solid #F48B36' : (isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)'),
+                                                color: isDark ? 'white' : '#1a1a1a',
                                                 textAlign: 'left',
                                                 fontSize: '1rem',
                                                 cursor: 'pointer',
@@ -166,9 +169,9 @@ export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
                                             style={{
                                                 padding: '1rem',
                                                 borderRadius: '12px',
-                                                background: formData.wantsDemo === opt ? 'rgba(244, 139, 54, 0.1)' : 'rgba(255, 255, 255, 0.03)',
-                                                border: formData.wantsDemo === opt ? '1px solid #F48B36' : '1px solid rgba(255, 255, 255, 0.1)',
-                                                color: 'white',
+                                                background: formData.wantsDemo === opt ? 'rgba(244, 139, 54, 0.1)' : (isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.05)'),
+                                                border: formData.wantsDemo === opt ? '1px solid #F48B36' : (isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)'),
+                                                color: isDark ? 'white' : '#1a1a1a',
                                                 textAlign: 'left',
                                                 fontSize: '1rem',
                                                 cursor: 'pointer',
@@ -202,10 +205,10 @@ export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
                                         style={{
                                             width: '100%',
                                             padding: '1rem',
-                                            background: 'rgba(255,255,255,0.05)',
-                                            border: '1px solid rgba(255,255,255,0.1)',
+                                            background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                                            border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)',
                                             borderRadius: '12px',
-                                            color: 'white',
+                                            color: isDark ? 'white' : '#1a1a1a',
                                             fontSize: '1rem',
                                             outline: 'none'
                                         }}
@@ -243,8 +246,8 @@ export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
                                         width: '100%',
                                         padding: '1rem',
                                         borderRadius: '12px',
-                                        background: (!formData.workEmail || !formData.demoTime) ? 'rgba(255,255,255,0.1)' : '#F48B36',
-                                        color: (!formData.workEmail || !formData.demoTime) ? 'rgba(255,255,255,0.3)' : 'white',
+                                        background: (!formData.workEmail || !formData.demoTime) ? (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)') : '#F48B36',
+                                        color: (!formData.workEmail || !formData.demoTime) ? (isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)') : 'white',
                                         border: 'none',
                                         cursor: (!formData.workEmail || !formData.demoTime) ? 'not-allowed' : 'pointer',
                                         fontSize: '1rem',

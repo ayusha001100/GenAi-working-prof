@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Check } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { db } from '../config/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 
@@ -15,6 +16,8 @@ const OUTCOMES = [
 
 export default function OutcomeSurveyModal({ isOpen, onClose, onComplete }) {
     const { user } = useAuth();
+    const { theme } = useTheme();
+    const isDark = theme === 'dark';
     const [selectedOutcome, setSelectedOutcome] = useState('');
     const [submitting, setSubmitting] = useState(false);
 
@@ -85,13 +88,15 @@ export default function OutcomeSurveyModal({ isOpen, onClose, onComplete }) {
                     exit={{ scale: 0.9, opacity: 0, y: 40 }}
                     transition={{ type: "spring", duration: 0.6, bounce: 0.3 }}
                     style={{
-                        background: 'linear-gradient(180deg, rgba(30, 30, 30, 0.9) 0%, rgba(10, 10, 10, 0.95) 100%)',
-                        border: '1px solid rgba(255, 255, 255, 0.08)',
+                        background: isDark
+                            ? 'linear-gradient(180deg, rgba(30, 30, 30, 0.9) 0%, rgba(10, 10, 10, 0.95) 100%)'
+                            : '#ffffff',
+                        border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.1)',
                         borderRadius: '28px',
                         width: '100%',
                         maxWidth: '500px',
                         overflow: 'hidden',
-                        boxShadow: '0 25px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05)',
+                        boxShadow: isDark ? '0 25px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05)' : '0 25px 60px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05)',
                         fontFamily: "'Inter', sans-serif",
                         position: 'relative'
                     }}
@@ -115,7 +120,7 @@ export default function OutcomeSurveyModal({ isOpen, onClose, onComplete }) {
                                 fontSize: '1.5rem',
                                 fontWeight: 800,
                                 marginBottom: '0.2rem',
-                                background: 'linear-gradient(to right, #fff, #aaa)',
+                                background: isDark ? 'linear-gradient(to right, #fff, #aaa)' : 'linear-gradient(to right, #1a1a1a, #5c5c5c)',
                                 WebkitBackgroundClip: 'text',
                                 WebkitTextFillColor: 'transparent',
                                 letterSpacing: '-0.03em'
@@ -130,9 +135,9 @@ export default function OutcomeSurveyModal({ isOpen, onClose, onComplete }) {
                         <button
                             onClick={onClose}
                             style={{
-                                background: 'rgba(255,255,255,0.03)',
-                                border: '1px solid rgba(255,255,255,0.05)',
-                                color: '#a1a1aa',
+                                background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.05)',
+                                border: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(0,0,0,0.05)',
+                                color: isDark ? '#a1a1aa' : '#666',
                                 cursor: 'pointer',
                                 width: '36px', height: '36px',
                                 borderRadius: '12px',
@@ -153,7 +158,7 @@ export default function OutcomeSurveyModal({ isOpen, onClose, onComplete }) {
                         <h3 style={{
                             fontSize: '1.2rem',
                             fontWeight: 500,
-                            color: 'rgba(255,255,255,0.9)',
+                            color: isDark ? 'rgba(255,255,255,0.9)' : '#1a1a1a',
                             marginBottom: '1.5rem',
                             lineHeight: 1.4
                         }}>
@@ -171,11 +176,11 @@ export default function OutcomeSurveyModal({ isOpen, onClose, onComplete }) {
                                         borderRadius: '18px',
                                         background: selectedOutcome === option
                                             ? 'linear-gradient(90deg, rgba(255, 87, 34, 0.15), rgba(255, 87, 34, 0.05))'
-                                            : 'rgba(255, 255, 255, 0.02)',
+                                            : (isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.04)'),
                                         border: selectedOutcome === option
                                             ? '1px solid #FF5722'
-                                            : '1px solid rgba(255, 255, 255, 0.06)',
-                                        color: selectedOutcome === option ? 'white' : 'rgba(255, 255, 255, 0.6)',
+                                            : (isDark ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(0, 0, 0, 0.1)'),
+                                        color: selectedOutcome === option ? 'white' : (isDark ? 'rgba(255, 255, 255, 0.6)' : '#1a1a1a'),
                                         textAlign: 'left',
                                         fontSize: '1rem',
                                         cursor: 'pointer',
@@ -237,8 +242,8 @@ export default function OutcomeSurveyModal({ isOpen, onClose, onComplete }) {
                                 borderRadius: '18px',
                                 background: selectedOutcome
                                     ? 'linear-gradient(135deg, #FF6B00 0%, #FF8C00 100%)'
-                                    : 'rgba(255,255,255,0.05)',
-                                color: selectedOutcome ? 'white' : 'rgba(255,255,255,0.2)',
+                                    : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'),
+                                color: selectedOutcome ? 'white' : (isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.3)'),
                                 border: 'none',
                                 cursor: selectedOutcome ? 'pointer' : 'not-allowed',
                                 fontWeight: 700,

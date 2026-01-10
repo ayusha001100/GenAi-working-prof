@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Check, X, ArrowRight, MessageSquare } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { db } from '../config/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 
 export default function Day2FeedbackModal({ isOpen, onClose, onComplete }) {
     const { user } = useAuth();
+    const { theme } = useTheme();
+    const isDark = theme === 'dark';
     const [step, setStep] = useState(1);
     const [rating, setRating] = useState(0);
     const [feedback, setFeedback] = useState('');
@@ -74,13 +77,17 @@ export default function Day2FeedbackModal({ isOpen, onClose, onComplete }) {
                     exit={{ scale: 0.9, opacity: 0, y: 30 }}
                     transition={{ type: "spring", duration: 0.6, bounce: 0.3 }}
                     style={{
-                        background: 'linear-gradient(180deg, rgba(30, 30, 30, 0.95) 0%, rgba(10, 10, 10, 0.98) 100%)',
-                        border: '1px solid rgba(255, 255, 255, 0.08)',
+                        background: isDark
+                            ? 'linear-gradient(180deg, rgba(30, 30, 30, 0.95) 0%, rgba(10, 10, 10, 0.98) 100%)'
+                            : '#ffffff',
+                        border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.1)',
                         borderRadius: '28px',
                         width: '100%',
                         maxWidth: '500px',
                         overflow: 'hidden',
-                        boxShadow: '0 25px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05)',
+                        boxShadow: isDark
+                            ? '0 25px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05)'
+                            : '0 25px 60px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05)',
                         position: 'relative'
                     }}
                 >
@@ -99,7 +106,7 @@ export default function Day2FeedbackModal({ isOpen, onClose, onComplete }) {
                         alignItems: 'center'
                     }}>
                         <div>
-                            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', letterSpacing: '-0.02em', background: 'linear-gradient(to right, #fff, #bbb)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: isDark ? 'white' : '#1a1a1a', letterSpacing: '-0.02em', background: isDark ? 'linear-gradient(to right, #fff, #bbb)' : 'linear-gradient(to right, #1a1a1a, #5c5c5c)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                                 Day 2 Feedback
                             </h2>
                             <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.9rem', marginTop: '4px' }}>Step {step} of 2</p>
@@ -127,7 +134,7 @@ export default function Day2FeedbackModal({ isOpen, onClose, onComplete }) {
                             >
                                 {step === 1 && (
                                     <div style={{ textAlign: 'center', padding: '1rem 0' }}>
-                                        <h3 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'rgba(255,255,255,0.9)', marginBottom: '2rem' }}>
+                                        <h3 style={{ fontSize: '1.5rem', fontWeight: 600, color: isDark ? 'rgba(255,255,255,0.9)' : '#1a1a1a', marginBottom: '2rem' }}>
                                             Rate Day 2 Content
                                         </h3>
                                         <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginBottom: '1rem' }}>
@@ -152,7 +159,7 @@ export default function Day2FeedbackModal({ isOpen, onClose, onComplete }) {
                                                 </button>
                                             ))}
                                         </div>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', maxWidth: '300px', margin: '0 auto', color: 'rgba(255,255,255,0.3)', fontSize: '0.85rem', fontWeight: 500 }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', maxWidth: '300px', margin: '0 auto', color: isDark ? 'rgba(255,255,255,0.3)' : '#666', fontSize: '0.85rem', fontWeight: 500 }}>
                                             <span>Needs Work</span>
                                             <span>Excellent</span>
                                         </div>
@@ -193,9 +200,9 @@ export default function Day2FeedbackModal({ isOpen, onClose, onComplete }) {
                                             autoFocus
                                             rows={6}
                                             style={{
-                                                width: '100%', padding: '1.2rem', background: 'rgba(255,255,255,0.03)',
-                                                border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px',
-                                                color: 'white', fontSize: '1rem', outline: 'none', resize: 'none',
+                                                width: '100%', padding: '1.2rem', background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.05)',
+                                                border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)', borderRadius: '16px',
+                                                color: isDark ? 'white' : '#1a1a1a', fontSize: '1rem', outline: 'none', resize: 'none',
                                                 fontFamily: 'inherit', transition: 'all 0.2s',
                                                 boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2)'
                                             }}
@@ -211,8 +218,8 @@ export default function Day2FeedbackModal({ isOpen, onClose, onComplete }) {
                                                 width: '100%',
                                                 padding: '1.2rem',
                                                 borderRadius: '16px',
-                                                background: feedback.trim() ? 'linear-gradient(135deg, #F48B36 0%, #FFB74D 100%)' : 'rgba(255,255,255,0.05)',
-                                                color: feedback.trim() ? 'white' : 'rgba(255,255,255,0.2)',
+                                                background: feedback.trim() ? 'linear-gradient(135deg, #F48B36 0%, #FFB74D 100%)' : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'),
+                                                color: feedback.trim() ? 'white' : (isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.3)'),
                                                 border: 'none',
                                                 cursor: feedback.trim() ? 'pointer' : 'not-allowed',
                                                 fontWeight: 700,
