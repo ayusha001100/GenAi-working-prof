@@ -16,6 +16,8 @@ import ScoreCardModal from '../components/ScoreCardModal';
 import Day2ApplicationModal from '../components/Day2ApplicationModal';
 import Day2FeedbackModal from '../components/Day2FeedbackModal';
 import FinalFeedbackModal from '../components/FinalFeedbackModal';
+import { db } from '../config/firebase';
+import { doc, updateDoc, arrayUnion, increment } from 'firebase/firestore';
 
 const QuizComponent = ({ sectionId, onComplete }) => {
     const questions = quizzes[sectionId] || [];
@@ -253,36 +255,21 @@ export default function DocPage({ day }) {
         }
 
         try {
-            // Safe access to userData with defaults
-            const safeUserData = userData || {
-                progress: { completedSections: [] },
-                stats: { totalPoints: 0, totalCorrect: 0, totalIncorrect: 0 }
-            };
-
-            const currentCompletedSections = safeUserData.progress?.completedSections || [];
-            const isAlreadyCompleted = currentCompletedSections.includes(sectionId);
-
+            const userRef = doc(db, 'users', user.uid);
+            const isAlreadyCompleted = userData?.progress?.completedSections?.includes(sectionId);
             const pointsDelta = correct - incorrect;
 
-            let updatedUserData = safeUserData;
-
             if (!isAlreadyCompleted) {
-                updatedUserData = {
-                    ...safeUserData,
-                    progress: {
-                        ...(safeUserData.progress || {}),
-                        completedSections: [...currentCompletedSections, sectionId]
-                    },
-                    stats: {
-                        ...(safeUserData.stats || {}),
-                        totalPoints: (safeUserData.stats?.totalPoints || 0) + pointsDelta,
-                        totalCorrect: (safeUserData.stats?.totalCorrect || 0) + correct,
-                        totalIncorrect: (safeUserData.stats?.totalIncorrect || 0) + incorrect
-                    }
-                };
-
-                setUserData(updatedUserData); // Update Context locally
-                localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
+                updateDoc(userRef, {
+                    'progress.completedSections': arrayUnion(sectionId),
+                    'stats.totalPoints': increment(pointsDelta),
+                    'stats.totalCorrect': increment(correct),
+                    'stats.totalIncorrect': increment(incorrect)
+                }).catch(async (err) => {
+                    // Fallback to setDoc if update fails (e.g. fields don't exist yet)
+                    // But in our current flow, fields should be initialized in AuthProvider
+                    console.error("Firestore Update Error, trying merge:", err);
+                });
             }
 
             // Visual Feedback

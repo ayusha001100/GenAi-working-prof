@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Search, ChevronRight, Check } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { db } from '../config/firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 const JOB_ROLES = [
     "Account Executive", "Account Manager", "Accountant", "Administrative Assistant", "Agile Coach", "AI Engineer", "Android Developer", "Architect", "Art Director", "Attorney", "Auditor",
@@ -88,12 +90,9 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
 
     const saveProgress = (data) => {
         if (user) {
-            const updatedUserData = {
-                ...userData,
+            setDoc(doc(db, 'users', user.uid), {
                 onboarding: data
-            };
-            setUserData(updatedUserData);
-            localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
+            }, { merge: true }).catch(e => console.error("Autosave error:", e));
         }
     };
 
@@ -119,15 +118,12 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
         setLoading(true);
         console.log("Survey Data:", finalData);
 
-        // Save progress locally
+        // Save progress to Firestore
         if (user) {
-            const updatedUserData = {
-                ...userData,
+            setDoc(doc(db, 'users', user.uid), {
                 onboarding: finalData,
                 profile: finalData
-            };
-            setUserData(updatedUserData);
-            localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
+            }, { merge: true }).catch(e => console.error("Error saving onboarding:", e));
         }
 
         // Ensure we proceed after a short delay for UX

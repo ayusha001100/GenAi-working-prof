@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Briefcase } from 'lucide-react';
+import { db } from '../config/firebase';
+import { doc, onSnapshot } from 'firebase/firestore';
 
 export default function WorkplaceUsageCard({ day = 'day1', style = {} }) {
     const isDay1 = day === 'day1';
@@ -24,20 +26,15 @@ export default function WorkplaceUsageCard({ day = 'day1', style = {} }) {
     const [sessionData, setSessionData] = useState(null);
 
     useEffect(() => {
-        const savedConfig = localStorage.getItem('live_session_config');
-        if (savedConfig) {
-            setSessionData(JSON.parse(savedConfig));
-        }
-
-        // Optional: listen for changes in other tabs
-        const handleStorage = (e) => {
-            if (e.key === 'live_session_config' && e.newValue) {
-                setSessionData(JSON.parse(e.newValue));
+        const docRef = doc(db, 'config', 'liveSession');
+        const unsubscribe = onSnapshot(docRef, (docSnap) => {
+            if (docSnap.exists()) {
+                setSessionData(docSnap.data());
             }
-        };
-        window.addEventListener('storage', handleStorage);
-        return () => window.removeEventListener('storage', handleStorage);
+        });
+        return () => unsubscribe();
     }, []);
+
 
 
     // Fallback data

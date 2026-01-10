@@ -32,37 +32,42 @@ export default function GsapHero() {
 
     useEffect(() => {
         let ctx = gsap.context(() => {
-            // ... (rest of GSAP code)
             // 1. Initial Reveal
             const tl = gsap.timeline();
 
-            tl.from(ctaRef.current, {
-                scale: 0.8,
-                opacity: 0,
-                duration: 0.8,
-                ease: "back.out(1.7)"
-            }, "-=0.6");
+            if (ctaRef.current) {
+                tl.from(ctaRef.current, {
+                    scale: 0.8,
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: "back.out(1.7)"
+                }, "-=0.6");
+            }
 
             // 2. Floating Elements Animation
-            gsap.to(floatRef1.current, {
-                y: -30,
-                rotation: 10,
-                duration: 4,
-                repeat: -1,
-                yoyo: true,
-                ease: "sine.inOut"
-            });
+            if (floatRef1.current) {
+                gsap.to(floatRef1.current, {
+                    y: -30,
+                    rotation: 10,
+                    duration: 4,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut"
+                });
+            }
 
-            gsap.to(floatRef2.current, {
-                y: 40,
-                x: -20,
-                rotation: -15,
-                duration: 5,
-                repeat: -1,
-                yoyo: true,
-                ease: "sine.inOut",
-                delay: 1
-            });
+            if (floatRef2.current) {
+                gsap.to(floatRef2.current, {
+                    y: 40,
+                    x: -20,
+                    rotation: -15,
+                    duration: 5,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut",
+                    delay: 1
+                });
+            }
 
             // 3. Mouse Parallax (Simple)
             const handleMouseMove = (e) => {
@@ -70,16 +75,21 @@ export default function GsapHero() {
                 const x = (clientX / window.innerWidth - 0.5) * 40;
                 const y = (clientY / window.innerHeight - 0.5) * 40;
 
-                gsap.to([floatRef1.current, floatRef2.current], {
-                    x: x,
-                    y: y,
-                    duration: 1,
-                    ease: "power2.out"
-                });
+                const targets = [];
+                if (floatRef1.current) targets.push(floatRef1.current);
+                if (floatRef2.current) targets.push(floatRef2.current);
+
+                if (targets.length > 0) {
+                    gsap.to(targets, {
+                        x: x,
+                        y: y,
+                        duration: 1,
+                        ease: "power2.out"
+                    });
+                }
             };
 
             window.addEventListener('mousemove', handleMouseMove);
-
             return () => window.removeEventListener('mousemove', handleMouseMove);
         }, component);
 
@@ -169,6 +179,32 @@ export default function GsapHero() {
         }}>
             {/* Canvas Background */}
             <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }} />
+
+            {/* Floating Decorative Elements */}
+            <div ref={floatRef1} style={{
+                position: 'absolute',
+                top: '20%',
+                left: '10%',
+                width: '100px',
+                height: '100px',
+                background: 'rgba(255, 170, 2, 0.1)',
+                borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
+                filter: 'blur(20px)',
+                zIndex: 0,
+                pointerEvents: 'none'
+            }} />
+            <div ref={floatRef2} style={{
+                position: 'absolute',
+                bottom: '20%',
+                right: '10%',
+                width: '150px',
+                height: '150px',
+                background: 'rgba(255, 170, 2, 0.15)',
+                borderRadius: '50%',
+                filter: 'blur(30px)',
+                zIndex: 0,
+                pointerEvents: 'none'
+            }} />
 
             {/* Main Content Container */}
             <div style={{

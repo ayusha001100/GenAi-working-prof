@@ -1,15 +1,19 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
+import { auth, db, googleProvider, analytics } from '../config/firebase';
+import {
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+} from 'firebase/auth';
+import {
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp
+} from 'firebase/firestore';
 
 const AuthContext = createContext(null);
-
-// Mock user for local development
-const MOCK_USER = {
-    uid: 'local-user-id',
-    email: 'local@example.com',
-    displayName: 'Local User',
-    photoURL: 'https://ui-avatars.com/api/?name=Local+User'
-};
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -17,52 +21,59 @@ export const AuthProvider = ({ children }) => {
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        // Load user from localStorage on mount
-        const savedUser = localStorage.getItem('mock_user');
-        const savedUserData = localStorage.getItem('mock_user_data');
-        
-        if (savedUser) {
-            setUser(JSON.parse(savedUser));
-        }
-        if (savedUserData) {
-            setUserData(JSON.parse(savedUserData));
-        }
-        
-        setLoading(false);
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            setUser(currentUser);
+
+            if (currentUser) {
+                // Fetch extra user data from Firestore
+                const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+                if (userDoc.exists()) {
+                    setUserData(userDoc.data());
+                } else {
+                    // Initialize new user data if it doesn't exist
+                    const newData = {
+                        uid: currentUser.uid,
+                        email: currentUser.email,
+                        name: currentUser.displayName,
+                        createdAt: serverTimestamp(),
+                        progress: { completedSections: [] },
+                        stats: { totalPoints: 0, totalCorrect: 0, totalIncorrect: 0 },
+                        role: 'user'
+                    };
+                    await setDoc(doc(db, 'users', currentUser.uid), newData);
+                    setUserData(newData);
+                }
+            } else {
+                setUserData(null);
+            }
+            setLoading(false);
+        });
+
+        return () => unsubscribe();
     }, []);
 
     const loginWithGoogle = async () => {
-        // Mock Google login
-        setUser(MOCK_USER);
-        localStorage.setItem('mock_user', JSON.stringify(MOCK_USER));
-        
-        const initialUserData = {
-            uid: MOCK_USER.uid,
-            email: MOCK_USER.email,
-            name: MOCK_USER.displayName,
-            photoURL: MOCK_USER.photoURL,
-            createdAt: new Date().toISOString(),
-            progress: { completedSections: [] },
-            stats: { totalPoints: 0, totalCorrect: 0, totalIncorrect: 0 },
-            role: 'user'
-        };
-        
-        setUserData(initialUserData);
-        localStorage.setItem('mock_user_data', JSON.stringify(initialUserData));
-        return MOCK_USER;
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            return result.user;
+        } catch (error) {
+            console.error("Login Error:", error);
+            throw error;
+        }
     };
 
     const logout = async () => {
-        setUser(null);
-        setUserData(null);
-        localStorage.removeItem('mock_user');
-        localStorage.removeItem('mock_user_data');
-        localStorage.removeItem('user_name');
-        localStorage.removeItem('user_phone');
+        try {
+            await signOut(auth);
+            setUser(null);
+            setUserData(null);
+        } catch (error) {
+            console.error("Logout Error:", error);
+        }
     };
 
-    const login = async () => console.warn("Email login not implemented in this version");
-    const signup = async () => console.warn("Email signup not implemented in this version");
+    const login = async () => console.warn("Email login not implemented");
+    const signup = async () => console.warn("Email signup not implemented");
 
     const value = {
         user,
@@ -96,4 +107,5 @@ export const ProtectedRoute = ({ children }) => {
 
     return children;
 };
+
 

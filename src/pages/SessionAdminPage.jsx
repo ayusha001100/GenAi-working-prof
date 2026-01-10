@@ -4,6 +4,8 @@ import { Lock, Save, Calendar, Video, User, Check, Loader2, ArrowLeft } from 'lu
 import { useNavigate } from 'react-router-dom';
 import ThemeToggle from '../components/ThemeToggle';
 import { useTheme } from '../context/ThemeContext';
+import { db } from '../config/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 export default function SessionAdminPage() {
     const navigate = useNavigate();
@@ -61,9 +63,10 @@ export default function SessionAdminPage() {
     const fetchConfig = async () => {
         setFetching(true);
         try {
-            const savedConfig = localStorage.getItem('live_session_config');
-            if (savedConfig) {
-                setSessionData(JSON.parse(savedConfig));
+            const docRef = doc(db, 'config', 'liveSession');
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                setSessionData(docSnap.data());
             }
         } catch (error) {
             console.error("Error fetching config:", error);
@@ -88,7 +91,7 @@ export default function SessionAdminPage() {
     const handleSave = async () => {
         setLoading(true);
         try {
-            localStorage.setItem('live_session_config', JSON.stringify(sessionData));
+            await setDoc(doc(db, 'config', 'liveSession'), sessionData);
             setSuccess(true);
             setTimeout(() => setSuccess(false), 2000);
         } catch (error) {
@@ -98,6 +101,7 @@ export default function SessionAdminPage() {
             setLoading(false);
         }
     };
+
 
 
     const updateField = (section, field, value) => {

@@ -3,6 +3,8 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, MapPin, CreditCard, ShieldCheck, Mail, CheckCircle } from 'lucide-react';
+import { db } from '../config/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export default function HardcopyPage() {
 
@@ -61,18 +63,18 @@ export default function HardcopyPage() {
                 setPaymentStatus('success');
                 setStep(2);
 
-                // Save Order Locally (Mock)
-                const orders = JSON.parse(localStorage.getItem('mock_orders') || '[]');
-                orders.push({
-                    userId: user.uid,
-                    type: 'hardcopy_certificate',
-                    amount: 399,
-                    paymentId: response.razorpay_payment_id,
-                    shippingDetails: formData,
-                    status: 'paid',
-                    createdAt: new Date().toISOString()
-                });
-                localStorage.setItem('mock_orders', JSON.stringify(orders));
+                // Save Order to Firestore
+                if (user) {
+                    await addDoc(collection(db, 'orders'), {
+                        userId: user.uid,
+                        type: 'hardcopy_certificate',
+                        amount: 399,
+                        paymentId: response.razorpay_payment_id,
+                        shippingDetails: formData,
+                        status: 'paid',
+                        createdAt: serverTimestamp()
+                    });
+                }
             },
             prefill: {
                 name: formData.fullName,
@@ -83,6 +85,7 @@ export default function HardcopyPage() {
                 color: "#F48B36"
             }
         };
+
 
         const paymentObject = new window.Razorpay(options);
         paymentObject.open();

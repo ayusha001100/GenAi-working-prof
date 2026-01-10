@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Check, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { db } from '../config/firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
     const { user, userData, setUserData } = useAuth();
@@ -41,15 +43,11 @@ export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
 
     const saveProgress = (data) => {
         if (user) {
-            const updatedUserData = {
-                ...userData,
+            setDoc(doc(db, 'users', user.uid), {
                 surveys: {
-                    ...userData?.surveys,
                     org_fit_survey: data
                 }
-            };
-            setUserData(updatedUserData);
-            localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
+            }, { merge: true }).catch(e => console.error("Autosave error:", e));
         }
     };
 
@@ -76,18 +74,15 @@ export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
         console.log("Org Fit Survey Data:", formData);
 
         if (user) {
-            const updatedUserData = {
-                ...userData,
+            setDoc(doc(db, 'users', user.uid), {
                 surveys: {
-                    ...userData?.surveys,
                     org_fit_survey: formData
                 }
-            };
-            setUserData(updatedUserData);
-            localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
+            }, { merge: true }).catch(e => console.error("Error saving org fit:", e));
         }
         onComplete();
     };
+
 
 
     if (!isOpen) return null;

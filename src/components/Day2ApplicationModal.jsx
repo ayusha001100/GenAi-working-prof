@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Check, Zap, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { db } from '../config/firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 export default function Day2ApplicationModal({ isOpen, onClose, onComplete }) {
     const { user, userData, setUserData } = useAuth();
@@ -19,15 +21,11 @@ export default function Day2ApplicationModal({ isOpen, onClose, onComplete }) {
     useEffect(() => {
         const timer = setTimeout(() => {
             if (answer && user) {
-                const updatedUserData = {
-                    ...userData,
+                setDoc(doc(db, 'users', user.uid), {
                     surveys: {
-                        ...userData?.surveys,
                         day2_application: answer
                     }
-                };
-                setUserData(updatedUserData);
-                localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
+                }, { merge: true }).catch(e => console.error("Autosave error:", e));
             }
         }, 1000); // 1s sync
         return () => clearTimeout(timer);
@@ -39,15 +37,11 @@ export default function Day2ApplicationModal({ isOpen, onClose, onComplete }) {
         setSubmitting(true);
 
         if (user) {
-            const updatedUserData = {
-                ...userData,
+            setDoc(doc(db, 'users', user.uid), {
                 surveys: {
-                    ...userData?.surveys,
                     day2_application: answer
                 }
-            };
-            setUserData(updatedUserData);
-            localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
+            }, { merge: true }).catch(e => console.error("Error saving day 2 app:", e));
         }
 
         setTimeout(() => {
@@ -55,6 +49,7 @@ export default function Day2ApplicationModal({ isOpen, onClose, onComplete }) {
             onComplete();
         }, 1000);
     };
+
 
 
     if (!isOpen) return null;

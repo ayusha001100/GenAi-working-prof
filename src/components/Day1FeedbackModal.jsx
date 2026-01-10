@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Check, X, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { db } from '../config/firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 export default function Day1FeedbackModal({ isOpen, onClose, onComplete }) {
     const { user, userData, setUserData } = useAuth();
@@ -42,15 +44,11 @@ export default function Day1FeedbackModal({ isOpen, onClose, onComplete }) {
     const saveProgress = (data) => {
         if (user) {
             const finalData = { rating, ...data };
-            const updatedUserData = {
-                ...userData,
+            setDoc(doc(db, 'users', user.uid), {
                 surveys: {
-                    ...userData?.surveys,
                     day1_feedback: finalData
                 }
-            };
-            setUserData(updatedUserData);
-            localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
+            }, { merge: true }).catch(e => console.error("Autosave error:", e));
         }
     };
 
@@ -70,18 +68,15 @@ export default function Day1FeedbackModal({ isOpen, onClose, onComplete }) {
     const handleComplete = () => {
         const finalData = { rating, ...formData };
         if (user) {
-            const updatedUserData = {
-                ...userData,
+            setDoc(doc(db, 'users', user.uid), {
                 surveys: {
-                    ...userData?.surveys,
                     day1_feedback: finalData
                 }
-            };
-            setUserData(updatedUserData);
-            localStorage.setItem('mock_user_data', JSON.stringify(updatedUserData));
+            }, { merge: true }).catch(e => console.error("Error saving feedback:", e));
         }
         onComplete();
     };
+
 
 
     if (!isOpen) return null;
