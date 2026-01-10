@@ -84,9 +84,14 @@ export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
                         justifyContent: 'space-between',
                         alignItems: 'center'
                     }}>
-                        <h2 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'white' }}>
-                            Organization-fit Questions
-                        </h2>
+                        <div>
+                            <h2 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'white' }}>
+                                Know Your Career Seeker
+                            </h2>
+                            <p style={{ fontSize: '0.8rem', color: '#a1a1aa', marginTop: '0.2rem' }}>
+                                Quick intro—who are you?
+                            </p>
+                        </div>
                         <button onClick={onClose} style={{ background: 'transparent', border: 'none', color: '#a1a1aa', cursor: 'pointer' }}>
                             <X size={20} />
                         </button>

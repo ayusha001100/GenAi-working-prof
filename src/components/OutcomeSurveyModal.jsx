@@ -120,9 +120,11 @@ export default function OutcomeSurveyModal({ isOpen, onClose, onComplete }) {
                                 WebkitTextFillColor: 'transparent',
                                 letterSpacing: '-0.03em'
                             }}>
-                                KYC
+                                Know Your Career Seeker
                             </h2>
-                            <p style={{ color: '#FF5722', fontSize: '0.85rem', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Know Your Customer</p>
+                            <p style={{ color: '#FF5722', fontSize: '0.85rem', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                                Quick intro—who are you?
+                            </p>
                         </div>
 
                         <button

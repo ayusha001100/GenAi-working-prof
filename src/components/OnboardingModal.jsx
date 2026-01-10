@@ -145,16 +145,22 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                         borderTopLeftRadius: '24px',
                         borderTopRightRadius: '24px'
                     }}>
-                        <h2 style={{
-                            fontSize: '1.25rem',
-                            fontWeight: 700,
-                            color: 'white',
-                            background: 'linear-gradient(to right, #fff, #a1a1aa)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent'
-                        }}>
-                            {step === 1 ? 'Welcome to Day 1' : 'KYC :- Know Your Customer'}
-                        </h2>
+                        <div>
+                            <h2 style={{
+                                fontSize: '1.25rem',
+                                fontWeight: 700,
+                                color: 'white',
+                                background: 'linear-gradient(to right, #fff, #a1a1aa)',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                marginBottom: '0.25rem'
+                            }}>
+                                Know Your Career Seeker
+                            </h2>
+                            <p style={{ fontSize: '0.85rem', color: '#a1a1aa', fontWeight: 500 }}>
+                                Quick intro—who are you?
+                            </p>
+                        </div>
                         <button
                             onClick={onClose}
                             style={{

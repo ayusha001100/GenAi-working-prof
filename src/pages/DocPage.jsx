@@ -392,18 +392,22 @@ export default function DocPage({ day }) {
                                 ))}
                             </div>
                             <h2 style={{
-                                fontSize: 'clamp(3rem, 12vw, 6rem)',
+                                fontSize: 'clamp(2.2rem, 11vw, 6rem)',
                                 fontWeight: 900,
                                 marginBottom: '1.5rem',
                                 background: 'linear-gradient(to right, #6366f1, #ec4899, #f59e0b)',
                                 WebkitBackgroundClip: 'text',
                                 WebkitTextFillColor: 'transparent',
-                                letterSpacing: '-0.05em'
+                                letterSpacing: '-0.05em',
+                                lineHeight: '1.1',
+                                textAlign: 'center',
+                                width: '100%',
+                                padding: '0 0.5rem'
                             }}>
                                 BRILLIANT!
                             </h2>
-                            <p style={{ fontSize: 'clamp(1.5rem, 5vw, 2rem)', color: '#fff', fontWeight: 700, marginBottom: '0.5rem' }}>Section Mastered Successfully</p>
-                            <p style={{ fontSize: 'clamp(1rem, 3vw, 1.2rem)', color: 'rgba(255,255,255,0.6)' }}>Keep that momentum going!</p>
+                            <p style={{ fontSize: 'clamp(1.2rem, 4vw, 2rem)', color: '#fff', fontWeight: 700, marginBottom: '0.5rem' }}>Section Mastered Successfully</p>
+                            <p style={{ fontSize: 'clamp(0.9rem, 3vw, 1.2rem)', color: 'rgba(255,255,255,0.6)' }}>Keep that momentum going!</p>
                         </motion.div>
                     </motion.div>
                 )}
