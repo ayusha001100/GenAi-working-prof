@@ -38,10 +38,17 @@ export default function WorkplaceUsageCard({ day = 'day1', style = {} }) {
 
     // Fallback data
     const dayConfig = isDay1 ? (sessionData?.day1) : (sessionData?.day2);
-    const mentor = sessionData?.mentor || { name: 'Sahil Pandey', title: 'AI & ML Specialist' };
+
+    // Mentor Logic (Day specific defaults)
+    const defaultMentor = isDay1
+        ? { name: 'Saikiran Sondatkar', title: 'CEO and Founder at LetsUpgrade' }
+        : { name: 'Kshitiz Agarwal', title: 'SDE at HCL Software' };
+
+    const mentor = dayConfig?.mentor || defaultMentor;
+
     const title = dayConfig?.title || (isDay1 ? 'Fundamentals' : 'Advanced Applications');
-    const time = dayConfig?.time || (isDay1 ? 'Monday, 6:00 PM - 8:00 PM IST' : 'Tuesday, 6:00 PM - 8:00 PM IST');
-    const link = dayConfig?.link || 'https://meet.google.com/your-meeting-link';
+    const time = dayConfig?.time || '11:00 AM onwards';
+    const link = dayConfig?.link || (isDay1 ? 'https://luc.to/genai-day1zoom' : 'https://luc.to/genai-day2zoom');
 
     return (
         <div style={responsiveCardStyle}>

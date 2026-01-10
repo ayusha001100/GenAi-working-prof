@@ -26,19 +26,23 @@ export default function SessionAdminPage() {
     const [sessionData, setSessionData] = useState({
         day1: {
             title: 'Fundamentals',
-            time: 'Monday, 6:00 PM - 8:00 PM IST',
-            link: 'https://meet.google.com/example-link',
+            time: '11:00 AM onwards',
+            link: 'https://luc.to/genai-day1zoom',
+            mentor: {
+                name: 'Saikiran Sondatkar',
+                title: 'CEO and Founder at LetsUpgrade'
+            },
             active: true
         },
         day2: {
             title: 'Advanced Applications',
-            time: 'Tuesday, 6:00 PM - 8:00 PM IST',
-            link: 'https://meet.google.com/example-link',
+            time: '11:00 AM onwards',
+            link: 'https://luc.to/genai-day2zoom',
+            mentor: {
+                name: 'Kshitiz Agarwal',
+                title: 'SDE at HCL Software'
+            },
             active: true
-        },
-        mentor: {
-            name: 'Sahil Pandey',
-            title: 'AI & ML Specialist'
         }
     });
 
@@ -99,13 +103,28 @@ export default function SessionAdminPage() {
     };
 
     const updateField = (section, field, value) => {
-        setSessionData(prev => ({
-            ...prev,
-            [section]: {
-                ...prev[section],
-                [field]: value
-            }
-        }));
+        // Handle nested mentor update
+        if (field.startsWith('mentor.')) {
+            const mentorField = field.split('.')[1];
+            setSessionData(prev => ({
+                ...prev,
+                [section]: {
+                    ...prev[section],
+                    mentor: {
+                        ...prev[section].mentor,
+                        [mentorField]: value
+                    }
+                }
+            }));
+        } else {
+            setSessionData(prev => ({
+                ...prev,
+                [section]: {
+                    ...prev[section],
+                    [field]: value
+                }
+            }));
+        }
     };
 
     // --- Authentication View ---
@@ -195,8 +214,15 @@ export default function SessionAdminPage() {
                             </div>
                             <div style={{ display: 'grid', gap: '1.5rem' }}>
                                 <InputGroup label="Session Title" value={sessionData.day1.title} onChange={v => updateField('day1', 'title', v)} placeholder="e.g. Fundamentals of AI" />
-                                <InputGroup label="Session Time" value={sessionData.day1.time} onChange={v => updateField('day1', 'time', v)} placeholder="e.g. Monday, 6:00 PM - 8:00 PM IST" />
-                                <InputGroup label="Meeting Link" value={sessionData.day1.link} onChange={v => updateField('day1', 'link', v)} placeholder="https://meet.google.com/..." />
+                                <InputGroup label="Session Time" value={sessionData.day1.time} onChange={v => updateField('day1', 'time', v)} placeholder="e.g. 11:00 AM onwards" />
+                                <InputGroup label="Meeting Link" value={sessionData.day1.link} onChange={v => updateField('day1', 'link', v)} placeholder="https://..." />
+
+                                <div style={{ borderTop: '1px solid var(--border-color)', margin: '1rem 0' }}></div>
+                                <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><User size={18} /> Day 1 Mentor</h3>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                    <InputGroup label="Name" value={sessionData.day1.mentor?.name} onChange={v => updateField('day1', 'mentor.name', v)} placeholder="Mentor Name" />
+                                    <InputGroup label="Designation" value={sessionData.day1.mentor?.title} onChange={v => updateField('day1', 'mentor.title', v)} placeholder="Mentor Title" />
+                                </div>
                             </div>
                         </section>
 
@@ -208,22 +234,19 @@ export default function SessionAdminPage() {
                             </div>
                             <div style={{ display: 'grid', gap: '1.5rem' }}>
                                 <InputGroup label="Session Title" value={sessionData.day2.title} onChange={v => updateField('day2', 'title', v)} placeholder="e.g. Advanced Applications" />
-                                <InputGroup label="Session Time" value={sessionData.day2.time} onChange={v => updateField('day2', 'time', v)} placeholder="e.g. Tuesday, 6:00 PM - 8:00 PM IST" />
-                                <InputGroup label="Meeting Link" value={sessionData.day2.link} onChange={v => updateField('day2', 'link', v)} placeholder="https://meet.google.com/..." />
+                                <InputGroup label="Session Time" value={sessionData.day2.time} onChange={v => updateField('day2', 'time', v)} placeholder="e.g. 11:00 AM onwards" />
+                                <InputGroup label="Meeting Link" value={sessionData.day2.link} onChange={v => updateField('day2', 'link', v)} placeholder="https://..." />
+
+                                <div style={{ borderTop: '1px solid var(--border-color)', margin: '1rem 0' }}></div>
+                                <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><User size={18} /> Day 2 Mentor</h3>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                    <InputGroup label="Name" value={sessionData.day2.mentor?.name} onChange={v => updateField('day2', 'mentor.name', v)} placeholder="Mentor Name" />
+                                    <InputGroup label="Designation" value={sessionData.day2.mentor?.title} onChange={v => updateField('day2', 'mentor.title', v)} placeholder="Mentor Title" />
+                                </div>
                             </div>
                         </section>
 
-                        {/* Mentor Section */}
-                        <section style={{ background: 'var(--bg-secondary)', padding: '2rem', borderRadius: '24px', border: '1px solid var(--border-color)' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem', color: '#10b981' }}>
-                                <User size={24} />
-                                <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>Mentor Details</h2>
-                            </div>
-                            <div style={{ display: 'grid', gap: '1.5rem' }}>
-                                <InputGroup label="Mentor Name" value={sessionData.mentor.name} onChange={v => updateField('mentor', 'name', v)} placeholder="e.g. Sahil Pandey" />
-                                <InputGroup label="Mentor Title" value={sessionData.mentor.title} onChange={v => updateField('mentor', 'title', v)} placeholder="e.g. AI & ML Specialist" />
-                            </div>
-                        </section>
+
 
                     </div>
                 )}
