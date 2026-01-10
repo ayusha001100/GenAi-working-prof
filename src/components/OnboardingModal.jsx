@@ -271,7 +271,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
 
                         {step === 3 && (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                <p style={{ color: '#a1a1aa', marginBottom: '0.5rem' }}>Which department best matches you?</p>
+                                <p style={{ color: isDark ? '#a1a1aa' : '#666', marginBottom: '0.5rem' }}>Which department best matches you?</p>
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                                     {DEPARTMENTS.map((dept) => (
                                         <button
@@ -283,15 +283,15 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                             style={{
                                                 padding: '0.875rem',
                                                 borderRadius: '10px',
-                                                background: 'rgba(255, 255, 255, 0.03)',
-                                                border: '1px solid rgba(255, 255, 255, 0.1)',
-                                                color: 'white',
+                                                background: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.04)',
+                                                border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
+                                                color: isDark ? 'white' : '#1a1a1a',
                                                 fontSize: '0.95rem',
                                                 cursor: 'pointer',
                                                 transition: 'all 0.2s'
                                             }}
-                                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'}
-                                            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'}
+                                            onMouseEnter={(e) => e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'}
+                                            onMouseLeave={(e) => e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.04)'}
                                         >
                                             {dept}
                                         </button>
@@ -332,15 +332,15 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                             left: 0,
                                             right: 0,
                                             marginTop: '0.5rem',
-                                            background: '#1a1a1a',
-                                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                                            background: isDark ? '#1a1a1a' : '#ffffff',
+                                            border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
                                             borderRadius: '12px',
                                             maxHeight: '250px', // Slightly reduced to ensure it fits
                                             overflowY: 'auto',
                                             zIndex: 9999, // High z-index to stay on top
                                             boxShadow: '0 20px 50px rgba(0,0,0,0.8)' // Stronger shadow
                                         }}>
-                                            <div style={{ padding: '0.75rem', borderBottom: '1px solid rgba(255,255,255,0.05)', position: 'sticky', top: 0, background: '#1a1a1a' }}>
+                                            <div style={{ padding: '0.75rem', borderBottom: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(0,0,0,0.05)', position: 'sticky', top: 0, background: isDark ? '#1a1a1a' : '#ffffff' }}>
                                                 <input
                                                     type="text"
                                                     placeholder="Search roles..."
@@ -351,7 +351,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                                         width: '100%',
                                                         background: 'transparent',
                                                         border: 'none',
-                                                        color: 'white',
+                                                        color: isDark ? 'white' : '#1a1a1a',
                                                         outline: 'none',
                                                         fontSize: '0.95rem'
                                                     }}
@@ -369,10 +369,10 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                                     }}
                                                     style={{
                                                         padding: '0.75rem 1rem',
-                                                        color: '#d4d4d8',
+                                                        color: isDark ? '#d4d4d8' : '#333',
                                                         cursor: 'pointer',
                                                         fontSize: '0.95rem',
-                                                        borderBottom: '1px solid rgba(255,255,255,0.02)'
+                                                        borderBottom: isDark ? '1px solid rgba(255,255,255,0.02)' : '1px solid rgba(0,0,0,0.05)'
                                                     }}
                                                     onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 87, 34, 0.1)'}
                                                     onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
