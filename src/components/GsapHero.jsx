@@ -498,8 +498,10 @@ export default function GsapHero() {
 
                 <div style={{
                     marginTop: 'clamp(2rem, 4vw, 3rem)',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
                     position: 'relative',
-                    display: 'inline-block',
+                    display: 'block',
                     width: '100%',
                     maxWidth: '400px'
                 }}>
@@ -528,7 +530,8 @@ export default function GsapHero() {
                             border: 'none',
                             cursor: 'pointer',
                             width: '100%',
-                            display: 'inline-flex',
+                            display: 'flex',
+                            justifyContent: 'center',
                             alignItems: 'center',
                             gap: '0.8rem',
                             transition: 'all 0.4s cubic-bezier(0.2, 0, 0, 1)',
