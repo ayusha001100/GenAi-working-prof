@@ -18,12 +18,24 @@ export default function Day1FeedbackModal({ isOpen, onClose, onComplete }) {
         interestedInPaid: null // 'Yes', 'No', 'Maybe'
     });
 
+    const saveProgress = (data) => {
+        if (user) {
+            const finalData = { rating, ...data };
+            setDoc(doc(db, 'users', user.uid), {
+                surveys: {
+                    day1_feedback: finalData
+                }
+            }, { merge: true }).catch(e => console.error("Autosave error:", e));
+        }
+    };
+
     const handleNext = () => {
         if (step === 1 && rating === 0) return;
         if (step === 2 && !formData.mostUseful.trim()) return;
         if (step === 3 && !formData.needsImprovement.trim()) return;
 
         if (step < 4) {
+            saveProgress(formData); // Autosave
             setStep(step + 1);
         } else {
             handleComplete();

@@ -57,10 +57,22 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
 
     const [loading, setLoading] = useState(false);
 
+    const saveProgress = (data) => {
+        if (user) {
+            setDoc(doc(db, 'users', user.uid), {
+                onboarding: data
+            }, { merge: true }).catch(e => console.error("Autosave error:", e));
+        }
+    };
+
     // Initial question: Student / Working Professional / Fresher
+
+
     const handleProfessionSelect = (profession) => {
         const newData = { ...formData, profession };
         setFormData(newData);
+        saveProgress(newData);
+        saveProgress(newData); // Autosave
 
         if (profession === 'Student' || profession === 'Fresher') {
             // Skip remaining questions
@@ -251,7 +263,12 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                     />
                                 </div>
                                 <button
-                                    onClick={() => formData.organization && setStep(3)}
+                                    onClick={() => {
+                                        if (formData.organization) {
+                                            saveProgress(formData);
+                                            setStep(3);
+                                        }
+                                    }}
                                     disabled={!formData.organization}
                                     style={{
                                         padding: '1rem',
@@ -277,7 +294,9 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                         <button
                                             key={dept}
                                             onClick={() => {
-                                                setFormData({ ...formData, department: dept });
+                                                const newData = { ...formData, department: dept };
+                                                setFormData(newData);
+                                                saveProgress(newData);
                                                 setStep(4);
                                             }}
                                             style={{
@@ -362,9 +381,11 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                                 <div
                                                     key={role}
                                                     onClick={() => {
-                                                        setFormData({ ...formData, role });
+                                                        const newData = { ...formData, role };
+                                                        setFormData(newData);
                                                         setRoleSearch('');
                                                         setShowRoleDropdown(false);
+                                                        saveProgress(newData);
                                                         setStep(5);
                                                     }}
                                                     style={{
@@ -385,8 +406,10 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                             {roleSearch && !filteredRoles.includes(roleSearch) && (
                                                 <div
                                                     onClick={() => {
-                                                        setFormData({ ...formData, role: roleSearch });
+                                                        const newData = { ...formData, role: roleSearch };
+                                                        setFormData(newData);
                                                         setShowRoleDropdown(false);
+                                                        saveProgress(newData);
                                                         setStep(5);
                                                     }}
                                                     style={{

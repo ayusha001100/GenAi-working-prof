@@ -18,6 +18,16 @@ export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
         demoTime: '' // Morning, Afternoon, Evening
     });
 
+    const saveProgress = (data) => {
+        if (user) {
+            setDoc(doc(db, 'users', user.uid), {
+                surveys: {
+                    org_fit_survey: data
+                }
+            }, { merge: true }).catch(e => console.error("Autosave error:", e));
+        }
+    };
+
     const handleNext = () => {
         if (step === 1 && !formData.usesLms) return;
 
@@ -122,7 +132,9 @@ export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
                                         <button
                                             key={opt}
                                             onClick={() => {
-                                                setFormData({ ...formData, usesLms: opt });
+                                                const newData = { ...formData, usesLms: opt };
+                                                setFormData(newData);
+                                                saveProgress(newData);
                                                 setTimeout(() => setStep(2), 200);
                                             }}
                                             style={{
@@ -158,11 +170,14 @@ export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
                                         <button
                                             key={opt}
                                             onClick={() => {
-                                                setFormData({ ...formData, wantsDemo: opt });
+                                                const newData = { ...formData, wantsDemo: opt };
+                                                setFormData(newData);
                                                 // Handle logic in handleNext but provide visual feedback here
                                                 if (opt === 'Yes') {
+                                                    saveProgress(newData);
                                                     setTimeout(() => setStep(3), 200);
                                                 } else {
+                                                    // handleComplete saves final
                                                     setTimeout(() => handleComplete(), 300);
                                                 }
                                             }}
