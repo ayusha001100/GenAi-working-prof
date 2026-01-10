@@ -183,7 +183,31 @@ export default function DocPage({ day }) {
     const { user, userData, setUserData } = useAuth();
     const { theme } = useTheme();
     const content = day === 'day1' ? day1Content : day2Content;
-    const [activeId, setActiveId] = useState(content[0]?.id);
+
+    // Initial State
+    const [activeId, setActiveId] = useState(null);
+    const [initialized, setInitialized] = useState(false);
+
+    // Sync activeId with progress on load
+    useEffect(() => {
+        if (!initialized && content.length > 0) {
+            const sections = userData?.progress?.completedSections || [];
+            // Find first section that is NOT completed
+            const nextSection = content.find(s => !sections.includes(s.id));
+            if (nextSection) {
+                setActiveId(nextSection.id);
+            } else {
+                // If all done, default to first or last? 
+                // Default to first as a safe fallback if null, or last if they already finished
+                setActiveId(content[0]?.id);
+            }
+            setInitialized(true);
+        }
+    }, [userData, content, initialized]);
+
+    // Fallback if null (prevents crash before effect runs)
+    const currentActiveId = activeId || content[0]?.id;
+
     const [showWow, setShowWow] = useState(false);
     const [showFail, setShowFail] = useState(false);
     const [failScore, setFailScore] = useState({ correct: 0, total: 0 });
@@ -206,6 +230,21 @@ export default function DocPage({ day }) {
         const prevSectionId = content[index - 1].id;
         return !completedSections.includes(prevSectionId);
     };
+
+    // Scroll to active section on load
+    useEffect(() => {
+        if (initialized && activeId) {
+            // Delay slightly to ensure DOM is fully rendered
+            const timer = setTimeout(() => {
+                const el = document.getElementById(activeId);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 500);
+            return () => clearTimeout(timer);
+        }
+    }, [initialized, activeId]); // Only triggers when initialization completes
+
 
     const handleSectionComplete = (sectionId, correct, incorrect) => {
         const total = correct + incorrect;

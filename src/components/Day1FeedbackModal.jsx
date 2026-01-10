@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Check, X, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -17,6 +17,30 @@ export default function Day1FeedbackModal({ isOpen, onClose, onComplete }) {
         needsImprovement: '',
         interestedInPaid: null // 'Yes', 'No', 'Maybe'
     });
+
+    const { userData } = useAuth();
+    const [initialized, setInitialized] = useState(false);
+
+    useEffect(() => {
+        if (userData?.surveys?.day1_feedback && !initialized) {
+            const data = userData.surveys.day1_feedback;
+            setRating(data.rating || 0);
+            setFormData({
+                mostUseful: data.mostUseful || '',
+                needsImprovement: data.needsImprovement || '',
+                interestedInPaid: data.interestedInPaid || null
+            });
+
+            // Set Step based on missing data
+            if (!data.rating) setStep(1);
+            else if (!data.mostUseful) setStep(2);
+            else if (!data.needsImprovement) setStep(3);
+            else setStep(4);
+
+            setInitialized(true);
+        }
+    }, [userData, initialized]);
+
 
     const saveProgress = (data) => {
         if (user) {

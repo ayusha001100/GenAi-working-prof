@@ -52,6 +52,38 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
         ctc: ''
     });
 
+    const { userData } = useAuth();
+    const [initialized, setInitialized] = useState(false);
+
+    // Resume from last saved step on mount
+    useEffect(() => {
+        if (userData?.onboarding && !initialized) {
+            const data = userData.onboarding;
+            setFormData({
+                profession: data.profession || '',
+                organization: data.organization || '',
+                department: data.department || '',
+                role: data.role || '',
+                ctc: data.ctc || ''
+            });
+
+            // Calculate starting step
+            // Step 1: Profession
+            // Step 2: Org
+            // Step 3: Dept
+            // Step 4: Role
+            // Step 5: CTC
+            if (!data.profession) setStep(1);
+            else if (!data.organization) setStep(2);
+            else if (!data.department) setStep(3);
+            else if (!data.role) setStep(4);
+            else if (!data.ctc) setStep(5);
+            else setStep(5); // If all filled, stay at last step or it will close anyway
+
+            setInitialized(true);
+        }
+    }, [userData, initialized]);
+
     const [roleSearch, setRoleSearch] = useState('');
     const [showRoleDropdown, setShowRoleDropdown] = useState(false);
 

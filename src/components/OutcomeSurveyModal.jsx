@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Check } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -20,6 +20,16 @@ export default function OutcomeSurveyModal({ isOpen, onClose, onComplete }) {
     const isDark = theme === 'dark';
     const [selectedOutcome, setSelectedOutcome] = useState('');
     const [submitting, setSubmitting] = useState(false);
+
+    const { userData } = useAuth();
+
+    // Sync with existing data
+    useEffect(() => {
+        if (userData?.surveys?.outcome_survey && !selectedOutcome) {
+            setSelectedOutcome(userData.surveys.outcome_survey);
+        }
+    }, [userData]);
+
 
     const handleSelect = (outcome) => {
         setSelectedOutcome(outcome);

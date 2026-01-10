@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Check, Zap, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -9,6 +9,30 @@ export default function Day2ApplicationModal({ isOpen, onClose, onComplete }) {
     const { user } = useAuth();
     const [answer, setAnswer] = useState('');
     const [submitting, setSubmitting] = useState(false);
+
+    const { userData } = useAuth();
+
+    // Resume from saved answer
+    useEffect(() => {
+        if (userData?.surveys?.day2_application && !answer) {
+            setAnswer(userData.surveys.day2_application);
+        }
+    }, [userData]);
+
+    // Autosave on change (debounced manually or just effect)
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (answer && user) {
+                setDoc(doc(db, 'users', user.uid), {
+                    surveys: {
+                        day2_application: answer
+                    }
+                }, { merge: true }).catch(e => console.error("Autosave error:", e));
+            }
+        }, 1000); // 1s sync
+        return () => clearTimeout(timer);
+    }, [answer, user]);
+
 
     const handleSubmit = () => {
         if (!answer.trim()) return;

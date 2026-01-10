@@ -18,6 +18,30 @@ export default function OrgFitSurveyModal({ isOpen, onClose, onComplete }) {
         demoTime: '' // Morning, Afternoon, Evening
     });
 
+    const { userData } = useAuth();
+    const [initialized, setInitialized] = useState(false);
+
+    // Resume from saved progress
+    useEffect(() => {
+        if (userData?.surveys?.org_fit_survey && !initialized) {
+            const data = userData.surveys.org_fit_survey;
+            setFormData({
+                usesLms: data.usesLms || '',
+                wantsDemo: data.wantsDemo || '',
+                workEmail: data.workEmail || '',
+                demoTime: data.demoTime || ''
+            });
+
+            // Set Step
+            if (!data.usesLms) setStep(1);
+            else if (!data.wantsDemo) setStep(2);
+            else if (data.wantsDemo === 'Yes' && (!data.workEmail || !data.demoTime)) setStep(3);
+            else setStep(1);
+
+            setInitialized(true);
+        }
+    }, [userData, initialized]);
+
     const saveProgress = (data) => {
         if (user) {
             setDoc(doc(db, 'users', user.uid), {
