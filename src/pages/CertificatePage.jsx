@@ -196,10 +196,10 @@ export default function CertificatePage() {
                 {/* Overlays - Adjust top/left percentages based on the image provided */}
                 {imageLoaded && (
                     <>
-                        {/* Name Overlay - Super Premium Styling */}
+                        {/* Name Overlay - Optimized Position & High-End Typography */}
                         <div style={{
                             position: 'absolute',
-                            top: '48.5%', // Perfectly centered in the name field
+                            top: '41%', // Elevated to perfectly clear the body text below
                             left: '50%',
                             transform: 'translate(-50%, -50%)',
                             width: '90%',
@@ -209,34 +209,25 @@ export default function CertificatePage() {
                             zIndex: 10
                         }}>
                             <div style={{
-                                fontFamily: "'Playfair Display', serif",
-                                fontSize: studentName.length > 20 ? '42px' : '54px',
-                                fontWeight: '800',
-                                fontStyle: 'italic',
+                                fontFamily: "'Cinzel', serif",
+                                fontSize: studentName.length > 20 ? '38px' : '52px',
+                                fontWeight: '700',
                                 color: '#1a1a1a',
-                                textTransform: 'capitalize',
-                                letterSpacing: '0.5px',
+                                textTransform: 'uppercase',
+                                letterSpacing: '2px',
                                 whiteSpace: 'nowrap',
-                                textShadow: '0.5px 0.5px 1px rgba(0,0,0,0.05)',
-                                lineHeight: '1.2'
+                                lineHeight: '1',
+                                textAlign: 'center'
                             }}>
                                 {studentName}
                             </div>
-                            {/* Decorative Elegant Line below the name */}
-                            <div style={{
-                                width: '60%',
-                                maxWidth: '400px',
-                                height: '1.5px',
-                                background: 'linear-gradient(90deg, transparent 0%, rgba(244, 139, 54, 0.4) 50%, transparent 100%)',
-                                marginTop: '4px'
-                            }} />
                         </div>
 
-                        {/* Date Overlay - Bottom Right */}
+                        {/* Date Overlay - Bottom Right (Aligned with Date line) */}
                         <div style={{
                             position: 'absolute',
-                            bottom: '14%', // Adjusted based on visual estimation of the 'Date' line
-                            right: '12%', // Adjusted center
+                            bottom: '12%', // Lowered to sit closer to the 'Date' indicator
+                            right: '12%',
                             width: '200px',
                             textAlign: 'center',
                             fontFamily: "'Inter', sans-serif",
