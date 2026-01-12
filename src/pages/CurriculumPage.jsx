@@ -20,6 +20,13 @@ export default function CurriculumPage() {
     const completedSections = userData?.progress?.completedSections || [];
     const isDay1Complete = day1Content.length > 0 && day1Content.every(section => completedSections.includes(section.id));
 
+    // Auto-show onboarding if profile is incomplete
+    React.useEffect(() => {
+        if (user && userData && !userData.onboarding?.profession) {
+            setShowOnboarding(true);
+        }
+    }, [user, userData]);
+
     const handleLogout = () => { logout(); };
 
     const handleStartModule = (path) => {

@@ -45,6 +45,8 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
     const isDark = theme === 'dark';
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
+        name: '',
+        phone: '',
         profession: '',
         organization: '',
         department: '',
@@ -59,6 +61,8 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
         if (userData?.onboarding && !initialized) {
             const data = userData.onboarding;
             setFormData({
+                name: data.name || userData.name || user?.displayName || '',
+                phone: data.phone || '',
                 profession: data.profession || '',
                 organization: data.organization || '',
                 department: data.department || '',
@@ -67,21 +71,28 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
             });
 
             // Calculate starting step
-            // Step 1: Profession
-            // Step 2: Org
-            // Step 3: Dept
-            // Step 4: Role
-            // Step 5: CTC
-            if (!data.profession) setStep(1);
-            else if (!data.organization) setStep(2);
-            else if (!data.department) setStep(3);
-            else if (!data.role) setStep(4);
-            else if (!data.ctc) setStep(5);
-            else setStep(5); // If all filled, stay at last step or it will close anyway
+            if (!data.name || !data.phone) setStep(1);
+            else if (!data.profession) setStep(2);
+            else if (data.profession === 'Working Professional') {
+                if (!data.organization) setStep(3);
+                else if (!data.department) setStep(4);
+                else if (!data.role) setStep(5);
+                else if (!data.ctc) setStep(6);
+                else setStep(6);
+            } else {
+                setStep(2); // If student/fresher but all filled, stay at profession step or it will close
+            }
 
             setInitialized(true);
+        } else if (!initialized && user) {
+            // Initial load for new user
+            setFormData(prev => ({
+                ...prev,
+                name: userData?.name || user?.displayName || ''
+            }));
+            setInitialized(true);
         }
-    }, [userData, initialized]);
+    }, [userData, user, initialized]);
 
     const [roleSearch, setRoleSearch] = useState('');
     const [showRoleDropdown, setShowRoleDropdown] = useState(false);
@@ -109,7 +120,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
             handleComplete(newData);
         } else {
             // Go to next step for Working Professionals
-            setStep(2);
+            setStep(3);
         }
     };
 
@@ -121,6 +132,9 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
         // Save progress to Firestore
         if (user) {
             setDoc(doc(db, 'users', user.uid), {
+                name: finalData.name,
+                phone: finalData.phone,
+                profession: finalData.profession,
                 onboarding: finalData,
                 profile: finalData
             }, { merge: true }).catch(e => console.error("Error saving onboarding:", e));
@@ -219,12 +233,12 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                         </button>
                     </div>
 
-                    {/* Progress Bar (Only for Step 2+) */}
-                    {step > 1 && (
+                    {/* Progress Bar (Only for Step 3+) */}
+                    {step > 2 && (
                         <div style={{ height: '2px', background: 'rgba(255,255,255,0.1)', width: '100%' }}>
                             <motion.div
                                 initial={{ width: 0 }}
-                                animate={{ width: `${((step - 1) / 4) * 100}%` }}
+                                animate={{ width: `${((step - 2) / 4) * 100}%` }}
                                 style={{ height: '100%', background: '#FF5722' }}
                             />
                         </div>
@@ -233,6 +247,74 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                     {/* Content */}
                     <div style={{ padding: '2rem' }}>
                         {step === 1 && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                <div>
+                                    <label style={{ display: 'block', color: '#a1a1aa', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
+                                        Full Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="Enter your name"
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.875rem',
+                                            background: isDark ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.05)',
+                                            border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
+                                            borderRadius: '10px',
+                                            color: isDark ? 'white' : '#1a1a1a',
+                                            outline: 'none',
+                                            fontSize: '1rem'
+                                        }}
+                                    />
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', color: '#a1a1aa', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
+                                        Phone Number
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        placeholder="Enter your phone number"
+                                        value={formData.phone}
+                                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.875rem',
+                                            background: isDark ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.05)',
+                                            border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
+                                            borderRadius: '10px',
+                                            color: isDark ? 'white' : '#1a1a1a',
+                                            outline: 'none',
+                                            fontSize: '1rem'
+                                        }}
+                                    />
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        if (formData.name && formData.phone) {
+                                            saveProgress(formData);
+                                            setStep(2);
+                                        }
+                                    }}
+                                    disabled={!formData.name || !formData.phone}
+                                    style={{
+                                        padding: '1rem',
+                                        borderRadius: '12px',
+                                        background: (formData.name && formData.phone) ? '#FF5722' : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'),
+                                        color: (formData.name && formData.phone) ? 'white' : (isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)'),
+                                        border: 'none',
+                                        cursor: (formData.name && formData.phone) ? 'pointer' : 'not-allowed',
+                                        fontWeight: 600,
+                                        marginTop: '1rem',
+                                        transition: 'all 0.3s ease'
+                                    }}
+                                >
+                                    Continue
+                                </button>
+                            </div>
+                        )}
+                        {step === 2 && (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                                 <p style={{ color: isDark ? '#a1a1aa' : '#5c5c5c', marginBottom: '1rem' }}>You are currently:</p>
                                 {['Student', 'Fresher', 'Working Professional'].map((item) => (
@@ -269,7 +351,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                             </div>
                         )}
 
-                        {step === 2 && (
+                        {step === 3 && (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                                 <div>
                                     <label style={{ display: 'block', color: '#a1a1aa', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
@@ -296,7 +378,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                     onClick={() => {
                                         if (formData.organization) {
                                             saveProgress(formData);
-                                            setStep(3);
+                                            setStep(4);
                                         }
                                     }}
                                     disabled={!formData.organization}
@@ -316,7 +398,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                             </div>
                         )}
 
-                        {step === 3 && (
+                        {step === 4 && (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                                 <p style={{ color: isDark ? '#a1a1aa' : '#666', marginBottom: '0.5rem' }}>Which department best matches you?</p>
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
@@ -327,7 +409,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                                 const newData = { ...formData, department: dept };
                                                 setFormData(newData);
                                                 saveProgress(newData);
-                                                setStep(4);
+                                                setStep(5);
                                             }}
                                             style={{
                                                 padding: '0.875rem',
@@ -349,7 +431,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                             </div>
                         )}
 
-                        {step === 4 && (
+                        {step === 5 && (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                                 <div style={{ position: 'relative' }}>
                                     <label style={{ display: 'block', color: '#a1a1aa', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
@@ -416,7 +498,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                                         setRoleSearch('');
                                                         setShowRoleDropdown(false);
                                                         saveProgress(newData);
-                                                        setStep(5);
+                                                        setStep(6);
                                                     }}
                                                     style={{
                                                         padding: '0.75rem 1rem',
@@ -440,7 +522,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                                         setFormData(newData);
                                                         setShowRoleDropdown(false);
                                                         saveProgress(newData);
-                                                        setStep(5);
+                                                        setStep(6);
                                                     }}
                                                     style={{
                                                         padding: '0.75rem 1rem',
@@ -459,7 +541,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                             </div>
                         )}
 
-                        {step === 5 && (
+                        {step === 6 && (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                                 <p style={{ color: isDark ? '#a1a1aa' : '#666', marginBottom: '1rem', fontSize: '0.95rem' }}>Your current annual CTC range:</p>
                                 {CTC_RANGES.map((range) => (
