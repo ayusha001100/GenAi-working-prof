@@ -196,37 +196,39 @@ export default function CertificatePage() {
                 {/* Overlays - Adjust top/left percentages based on the image provided */}
                 {imageLoaded && (
                     <>
-                        {/* Name Overlay - Centered precisely between text blocks */}
+                        {/* Name Overlay - Super Premium Styling */}
                         <div style={{
                             position: 'absolute',
-                            top: '48.5%',
+                            top: '48.5%', // Perfectly centered in the name field
                             left: '50%',
                             transform: 'translate(-50%, -50%)',
                             width: '90%',
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            gap: '8px'
+                            zIndex: 10
                         }}>
                             <div style={{
                                 fontFamily: "'Playfair Display', serif",
                                 fontSize: studentName.length > 20 ? '42px' : '54px',
-                                fontWeight: '700',
+                                fontWeight: '800',
                                 fontStyle: 'italic',
-                                color: '#000',
+                                color: '#1a1a1a',
                                 textTransform: 'capitalize',
-                                textAlign: 'center',
+                                letterSpacing: '0.5px',
                                 whiteSpace: 'nowrap',
-                                lineHeight: '1.1'
+                                textShadow: '0.5px 0.5px 1px rgba(0,0,0,0.05)',
+                                lineHeight: '1.2'
                             }}>
                                 {studentName}
                             </div>
-                            {/* Elegant Horizontal Line as seen in reference */}
+                            {/* Decorative Elegant Line below the name */}
                             <div style={{
-                                width: '70%',
-                                maxWidth: '600px',
-                                height: '1px',
-                                background: 'linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.2) 20%, rgba(0,0,0,0.2) 80%, transparent 100%)',
+                                width: '60%',
+                                maxWidth: '400px',
+                                height: '1.5px',
+                                background: 'linear-gradient(90deg, transparent 0%, rgba(244, 139, 54, 0.4) 50%, transparent 100%)',
+                                marginTop: '4px'
                             }} />
                         </div>
 
