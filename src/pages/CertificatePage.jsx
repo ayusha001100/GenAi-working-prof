@@ -196,28 +196,29 @@ export default function CertificatePage() {
                 {/* Overlays - Adjust top/left percentages based on the image provided */}
                 {imageLoaded && (
                     <>
-                        {/* Name Overlay - Elegant Italic on Proper Line */}
+                        {/* Name Overlay - Fix overlap, move to clear line space */}
                         <div style={{
                             position: 'absolute',
-                            top: '49%', // Perfectly centered between text blocks
+                            top: '41.5%', // Moved up into the clear gap to avoid overlapping the body text
                             left: '50%',
                             transform: 'translate(-50%, -50%)',
                             width: '90%',
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            zIndex: 10
+                            zIndex: 20
                         }}>
                             <div style={{
                                 fontFamily: "'Playfair Display', serif",
-                                fontSize: studentName.length > 20 ? '42px' : '56px',
-                                fontWeight: '700',
+                                fontSize: studentName.length > 20 ? '48px' : '64px',
+                                fontWeight: '900', // Maximum weight for visibility
                                 fontStyle: 'italic',
-                                color: '#1a1a1a',
+                                color: '#000000', // Pure black for high contrast
                                 textTransform: 'capitalize',
                                 letterSpacing: '0.5px',
                                 whiteSpace: 'nowrap',
-                                lineHeight: '1.2'
+                                lineHeight: '1',
+                                textAlign: 'center'
                             }}>
                                 {studentName}
                             </div>
