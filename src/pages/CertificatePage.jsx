@@ -196,10 +196,10 @@ export default function CertificatePage() {
                 {/* Overlays - Adjust top/left percentages based on the image provided */}
                 {imageLoaded && (
                     <>
-                        {/* Name Overlay - Optimized Position & High-End Typography */}
+                        {/* Name Overlay - Elegant Italic on Proper Line */}
                         <div style={{
                             position: 'absolute',
-                            top: '41%', // Elevated to perfectly clear the body text below
+                            top: '49%', // Perfectly centered between text blocks
                             left: '50%',
                             transform: 'translate(-50%, -50%)',
                             width: '90%',
@@ -209,15 +209,15 @@ export default function CertificatePage() {
                             zIndex: 10
                         }}>
                             <div style={{
-                                fontFamily: "'Cinzel', serif",
-                                fontSize: studentName.length > 20 ? '38px' : '52px',
+                                fontFamily: "'Playfair Display', serif",
+                                fontSize: studentName.length > 20 ? '42px' : '56px',
                                 fontWeight: '700',
+                                fontStyle: 'italic',
                                 color: '#1a1a1a',
-                                textTransform: 'uppercase',
-                                letterSpacing: '2px',
+                                textTransform: 'capitalize',
+                                letterSpacing: '0.5px',
                                 whiteSpace: 'nowrap',
-                                lineHeight: '1',
-                                textAlign: 'center'
+                                lineHeight: '1.2'
                             }}>
                                 {studentName}
                             </div>
