@@ -196,41 +196,42 @@ export default function CertificatePage() {
                 {/* Overlays - Adjust top/left percentages based on the image provided */}
                 {imageLoaded && (
                     <>
-                        {/* Name Overlay - Centered roughly above the middle line */}
+                        {/* Name Overlay - Moved down to fix overlap and centered */}
                         <div style={{
                             position: 'absolute',
-                            top: '46%', // Perfectly balanced between the certification line and course info
+                            top: '49%', // Perfectly centered between lines
                             left: '50%',
                             transform: 'translate(-50%, -50%)',
-                            width: '85%',
+                            width: '90%',
                             textAlign: 'center',
                             fontFamily: "'Playfair Display', serif",
-                            fontSize: studentName.length > 18 ? '36px' : '48px',
-                            fontWeight: '700',
-                            fontStyle: 'italic',
-                            color: '#1a1a1a',
+                            fontSize: studentName.length > 20 ? '38px' : '52px',
+                            fontWeight: '800',
+                            color: '#1a1a1a', // Richer black
                             textTransform: 'capitalize',
-                            letterSpacing: '0.5px',
+                            letterSpacing: '1px',
                             whiteSpace: 'nowrap',
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            lineHeight: '1.2'
+                            lineHeight: '1',
+                            textShadow: '0.2px 0.2px 0.5px rgba(0,0,0,0.1)'
                         }}>
                             {studentName}
                         </div>
 
-                        {/* Date Overlay - Bottom Right */}
+                        {/* Date Overlay - Moved down to align with 'Date' line */}
                         <div style={{
                             position: 'absolute',
-                            bottom: '14%', // Adjusted based on visual estimation of the 'Date' line
-                            right: '12%', // Adjusted center
+                            bottom: '11.8%', // Perfectly aligned with the signature/date horizontal
+                            right: '12%',
                             width: '200px',
                             textAlign: 'center',
                             fontFamily: "'Inter', sans-serif",
-                            fontSize: '15px',
+                            fontSize: '14px',
                             fontWeight: '600',
-                            color: '#333'
+                            color: '#222',
+                            letterSpacing: '0.5px'
                         }}>
                             {dateStr}
                         </div>
