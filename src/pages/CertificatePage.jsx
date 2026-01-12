@@ -196,28 +196,38 @@ export default function CertificatePage() {
                 {/* Overlays - Adjust top/left percentages based on the image provided */}
                 {imageLoaded && (
                     <>
-                        {/* Name Overlay - Centered roughly above the middle line */}
+                        {/* Name Overlay - Centered precisely between text blocks */}
                         <div style={{
                             position: 'absolute',
-                            top: '46%', // Perfectly balanced between the certification line and course info
+                            top: '48.5%',
                             left: '50%',
                             transform: 'translate(-50%, -50%)',
-                            width: '85%',
-                            textAlign: 'center',
-                            fontFamily: "'Playfair Display', serif",
-                            fontSize: studentName.length > 18 ? '36px' : '48px',
-                            fontWeight: '700',
-                            fontStyle: 'italic',
-                            color: '#1a1a1a',
-                            textTransform: 'capitalize',
-                            letterSpacing: '0.5px',
-                            whiteSpace: 'nowrap',
+                            width: '90%',
                             display: 'flex',
-                            justifyContent: 'center',
+                            flexDirection: 'column',
                             alignItems: 'center',
-                            lineHeight: '1.2'
+                            gap: '8px'
                         }}>
-                            {studentName}
+                            <div style={{
+                                fontFamily: "'Playfair Display', serif",
+                                fontSize: studentName.length > 20 ? '42px' : '54px',
+                                fontWeight: '700',
+                                fontStyle: 'italic',
+                                color: '#000',
+                                textTransform: 'capitalize',
+                                textAlign: 'center',
+                                whiteSpace: 'nowrap',
+                                lineHeight: '1.1'
+                            }}>
+                                {studentName}
+                            </div>
+                            {/* Elegant Horizontal Line as seen in reference */}
+                            <div style={{
+                                width: '70%',
+                                maxWidth: '600px',
+                                height: '1px',
+                                background: 'linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.2) 20%, rgba(0,0,0,0.2) 80%, transparent 100%)',
+                            }} />
                         </div>
 
                         {/* Date Overlay - Bottom Right */}
