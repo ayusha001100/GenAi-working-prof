@@ -199,16 +199,23 @@ export default function CertificatePage() {
                         {/* Name Overlay - Centered roughly above the middle line */}
                         <div style={{
                             position: 'absolute',
-                            top: '42%',  // Adjusted based on visual estimation
+                            top: '46%', // Perfectly balanced between the certification line and course info
                             left: '50%',
                             transform: 'translate(-50%, -50%)',
-                            width: '80%',
+                            width: '85%',
                             textAlign: 'center',
-                            fontFamily: "'Inter', sans-serif",
-                            fontSize: '36px',
+                            fontFamily: "'Playfair Display', serif",
+                            fontSize: studentName.length > 18 ? '36px' : '48px',
                             fontWeight: '700',
-                            color: '#000',
-                            textTransform: 'capitalize'
+                            fontStyle: 'italic',
+                            color: '#1a1a1a',
+                            textTransform: 'capitalize',
+                            letterSpacing: '0.5px',
+                            whiteSpace: 'nowrap',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            lineHeight: '1.2'
                         }}>
                             {studentName}
                         </div>

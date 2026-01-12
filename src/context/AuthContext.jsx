@@ -37,9 +37,10 @@ export const AuthProvider = ({ children }) => {
                 // Setup Real-time Listener for User Data
                 const userRef = doc(db, 'users', currentUser.uid);
 
-                unsubscribeSnapshot = onSnapshot(userRef, async (docSnap) => {
+                unsubscribeSnapshot = onSnapshot(userRef, (docSnap) => {
                     if (docSnap.exists()) {
                         setUserData(docSnap.data());
+                        setLoading(false);
                     } else {
                         // Initialize new user data if it doesn't exist
                         const newData = {
@@ -51,15 +52,24 @@ export const AuthProvider = ({ children }) => {
                             stats: { totalPoints: 0, totalCorrect: 0, totalIncorrect: 0 },
                             role: 'user'
                         };
-                        await setDoc(userRef, newData);
-                        // setDoc will trigger the snapshot listener again
+
+                        // Use setDoc cautiously
+                        setDoc(userRef, newData)
+                            .then(() => {
+                                // setDoc success - onSnapshot will trigger with newData
+                            })
+                            .catch(err => {
+                                console.error("Initialization error:", err);
+                                // If init fails, we still want to stop loading
+                                setLoading(false);
+                            });
                     }
-                    setLoading(false);
                 }, (error) => {
                     console.error("User snapshot error:", error);
                     setLoading(false);
                 });
             } else {
+
                 setUserData(null);
                 setLoading(false);
             }
