@@ -30,9 +30,11 @@ export default function Dashboard() {
         }
     }, [userData]);
 
-    const handleLogout = () => {
-        logout();
-        navigate('/');
+    const handleLogout = async () => {
+        const success = await logout();
+        if (success) {
+            navigate('/');
+        }
     };
 
     const handleStartModule = (path) => {
@@ -80,17 +82,16 @@ export default function Dashboard() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                padding: '1.5rem 5%',
-                background: 'rgba(255, 255, 255, 0.03)',
-                backdropFilter: 'blur(10px)',
+                padding: '1.2rem 5%',
+                background: 'rgba(var(--bg-primary-rgb), 0.8)',
+                backdropFilter: 'blur(12px)',
                 borderBottom: '1px solid var(--border-color)',
-                position: 'relative',
-                zIndex: 10
+                position: 'fixed',
+                top: 0, left: 0, right: 0,
+                zIndex: 100
             }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                    <div style={{ background: 'linear-gradient(135deg, #FF5722, #F44336)', padding: '6px', borderRadius: '8px' }}>
-                        <img src="/logo.png" alt="Logo" style={{ width: '20px', height: '20px', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
-                    </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', cursor: 'pointer' }} onClick={() => navigate('/')}>
+                    <img src={theme === 'dark' ? '/logo-dark.png' : '/logo.png'} alt="Logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
                     <span style={{ fontWeight: 800, fontSize: '1.2rem', letterSpacing: '-0.02em' }}>LetsUpgrade</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -103,14 +104,14 @@ export default function Dashboard() {
                     <button onClick={() => navigate('/profile')} className="nav-btn-icon">
                         <User size={20} />
                     </button>
-                    <button onClick={handleLogout} className="nav-btn">
+                    <button onClick={handleLogout} className="nav-btn-premium">
                         <LogOut size={18} /> Logout
                     </button>
                 </div>
             </header>
 
             {/* --- Main Dashboard Content --- */}
-            <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '4rem 5%', position: 'relative', zIndex: 1 }}>
+            <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '8rem 5% 4rem 5%', position: 'relative', zIndex: 1 }}>
 
                 {/* Header Section */}
                 <motion.div
@@ -122,25 +123,25 @@ export default function Dashboard() {
                     <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '0.5rem' }}>
                             <span style={{ fontSize: '3rem' }}>👋</span>
-                            <h1 style={{ fontSize: '3rem', fontWeight: 800, background: 'linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                                Welcome back, {userData?.name || 'Learner'}!
+                            <h1 style={{ fontSize: '3rem', fontWeight: 900, background: 'linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.04em' }}>
+                                Welcome, {userData?.name?.split(' ')[0] || 'Learner'}!
                             </h1>
                         </div>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', maxWidth: '600px' }}>
-                            Your journey to mastering Generative AI continues here. You're making great progress!
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', maxWidth: '600px', fontWeight: 500 }}>
+                            Your journey to mastering Generative AI continues here.
                         </p>
                     </div>
 
                     {/* Progress Card */}
                     <div style={{
                         background: 'var(--bg-secondary)',
-                        padding: '1.5rem 2rem',
-                        borderRadius: '20px',
+                        padding: '1.2rem 2rem',
+                        borderRadius: '24px',
                         border: '1px solid var(--border-color)',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '1.5rem',
-                        boxShadow: '0 10px 30px -10px rgba(0,0,0,0.05)'
+                        boxShadow: '0 20px 40px -10px rgba(0,0,0,0.05)'
                     }}>
                         <div style={{ position: 'relative', width: '60px', height: '60px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <svg width="60" height="60" viewBox="0 0 100 100">

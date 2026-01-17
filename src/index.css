@@ -282,3 +282,91 @@ a {
     transform: scaleX(1.2);
   }
 }
+/* --- PREMIUM BUTTONS --- */
+
+.nav-btn {
+  padding: 0.6rem 1.4rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.nav-btn:hover {
+  background: var(--bg-primary);
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.15);
+}
+
+.nav-btn-premium {
+  padding: 0.6rem 1.4rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 87, 34, 0.2);
+  background: rgba(255, 87, 34, 0.05);
+  color: #FF5722;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-btn-premium:hover {
+  background: #FF5722;
+  color: white;
+  border-color: #FF5722;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -4px rgba(255, 87, 34, 0.4);
+}
+
+.nav-btn-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.nav-btn-icon:hover {
+  background: var(--bg-primary);
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  transform: translateY(-1px);
+}
+
+/* Day Pills */
+.day-pill {
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+
+.day-pill-orange {
+  background: rgba(255, 87, 34, 0.1);
+  color: #FF5722;
+}
+
+.day-pill-gold {
+  background: rgba(244, 139, 54, 0.1);
+  color: #F48B36;
+}

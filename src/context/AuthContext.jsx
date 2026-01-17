@@ -96,8 +96,10 @@ export const AuthProvider = ({ children }) => {
             await signOut(auth);
             setUser(null);
             setUserData(null);
+            return true;
         } catch (error) {
             console.error("Logout Error:", error);
+            return false;
         }
     };
 

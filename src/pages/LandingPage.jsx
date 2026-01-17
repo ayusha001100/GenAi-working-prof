@@ -30,8 +30,11 @@ export default function LandingPage() {
         }
     }, [location]);
 
-    const handleLogout = () => {
-        logout();
+    const handleLogout = async () => {
+        const success = await logout();
+        if (success) {
+            navigate('/');
+        }
     };
 
     const handleStartModule = (path) => {
@@ -86,80 +89,62 @@ export default function LandingPage() {
                 padding: '1rem 5%',
                 position: 'fixed',
                 top: 0, left: 0, right: 0,
-                background: 'rgba(255, 255, 255, 0.7)',
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
-                zIndex: 50,
-                borderBottom: '1px solid rgba(0,0,0,0.05)',
+                background: 'rgba(var(--bg-primary-rgb), 0.7)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                zIndex: 100,
+                borderBottom: '1px solid var(--border-color)',
                 transition: 'all 0.3s ease',
                 boxShadow: '0 4px 30px rgba(0, 0, 0, 0.03)'
             }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer' }} onClick={() => navigate('/')}>
                     <img src={theme === 'dark' ? '/logo-dark.png' : '/logo.png'} alt="Logo" style={{ width: '36px', height: '36px', objectFit: 'contain' }} />
                     <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1', fontWeight: 800, fontSize: '1.2rem', letterSpacing: '-0.03em' }}>
                         <span>LetsUpgrade</span>
                     </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
 
                     {user && (
                         <div style={{
-                            padding: '10px 24px',
-                            background: 'rgba(255, 255, 255, 0.05)',
+                            padding: '8px 20px',
+                            background: 'rgba(255, 87, 34, 0.05)',
                             backdropFilter: 'blur(10px)',
                             borderRadius: '50px',
-                            border: '1px solid rgba(255, 87, 34, 0.2)',
+                            border: '1px solid rgba(255, 87, 34, 0.15)',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '12px',
-                            marginRight: '0.8rem'
+                            gap: '10px'
                         }}>
                             <span style={{
-                                fontSize: '1.1rem',
+                                fontSize: '0.9rem',
                                 color: 'var(--text-secondary)',
                                 fontWeight: 500,
                             }}>
                                 Hello,
                             </span>
                             <span style={{
-                                fontSize: '1.5rem',
+                                fontSize: '1.1rem',
                                 fontWeight: 800,
                                 background: 'linear-gradient(135deg, #FF5722 0%, #FFB74D 100%)',
                                 WebkitBackgroundClip: 'text',
                                 WebkitTextFillColor: 'transparent',
                                 textTransform: 'capitalize',
                             }}>
-                                {userData?.name?.split(' ')[0] || user?.displayName?.split(' ')[0] || 'Sahil'}
+                                {userData?.name?.split(' ')[0] || user?.displayName?.split(' ')[0] || 'Member'}
                             </span>
-                            <div className="animate-pulse" style={{
-                                width: '8px',
-                                height: '8px',
-                                background: '#00e676',
-                                borderRadius: '50%',
-                                boxShadow: '0 0 10px #00e676'
-                            }} />
                         </div>
                     )}
 
                     <ThemeToggle />
                     {user ? (
-                        <button onClick={handleLogout} className="nav-btn">
-                            Logout <LogOut size={16} />
+                        <button onClick={handleLogout} className="nav-btn-premium">
+                            <LogOut size={18} /> Logout
                         </button>
                     ) : (
                         <button
                             onClick={() => navigate('/login')}
-                            style={{
-                                background: 'white',
-                                color: 'black',
-                                border: '1px solid #ddd',
-                                padding: '0.5rem 1.2rem',
-                                borderRadius: '8px',
-                                cursor: 'pointer',
-                                fontWeight: 600,
-                                fontSize: '0.95rem',
-                                transition: 'transform 0.2s',
-                            }}
+                            className="nav-btn"
                         >
                             Login
                         </button>

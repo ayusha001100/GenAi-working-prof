@@ -199,7 +199,7 @@ export default function CertificatePage() {
                         {/* Name Overlay - Fix overlap, move to clear line space */}
                         <div style={{
                             position: 'absolute',
-                            top: '41.5%', // Moved up into the clear gap to avoid overlapping the body text
+                            top: '42%', // Aligned with the name line in the template
                             left: '50%',
                             transform: 'translate(-50%, -50%)',
                             width: '90%',
@@ -209,11 +209,10 @@ export default function CertificatePage() {
                             zIndex: 20
                         }}>
                             <div style={{
-                                fontFamily: "'Playfair Display', serif",
-                                fontSize: studentName.length > 20 ? '48px' : '64px',
-                                fontWeight: '900', // Maximum weight for visibility
-                                fontStyle: 'italic',
-                                color: '#000000', // Pure black for high contrast
+                                fontFamily: '"Comic Sans MS", "Comic Sans", cursive',
+                                fontSize: studentName.length > 20 ? '42px' : '56px',
+                                fontWeight: '700', 
+                                color: '#000000',
                                 textTransform: 'capitalize',
                                 letterSpacing: '0.5px',
                                 whiteSpace: 'nowrap',
