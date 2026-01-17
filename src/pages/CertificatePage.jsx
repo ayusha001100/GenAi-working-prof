@@ -210,8 +210,8 @@ export default function CertificatePage() {
                         }}>
                             <div style={{
                                 fontFamily: '"Comic Sans MS", "Comic Sans", cursive',
-                                fontSize: studentName.length > 20 ? '42px' : '56px',
-                                fontWeight: '700', 
+                                fontSize: '20px',
+                                fontWeight: '500',
                                 color: '#000000',
                                 textTransform: 'capitalize',
                                 letterSpacing: '0.5px',
