@@ -42,14 +42,14 @@ export default function WorkplaceUsageCard({ day = 'day1', style = {} }) {
 
     // Mentor Logic (Day specific defaults)
     const defaultMentor = isDay1
-        ? { name: 'Saikiran Sondatkar', title: 'CEO and Founder at LetsUpgrade' }
-        : { name: 'Kshitiz Agarwal', title: 'SDE at HCL Software' };
+        ? { name: 'Kshitiz Agarwal', title: 'SDE at HCL Software' }
+        : { name: 'Amit Joshi', title: 'Expert Mentor' };
 
     const mentor = dayConfig?.mentor || defaultMentor;
 
     const title = dayConfig?.title || (isDay1 ? 'Fundamentals' : 'Advanced Applications');
     const time = dayConfig?.time || '11:00 AM onwards';
-    const link = dayConfig?.link || (isDay1 ? 'https://luc.to/genai-day1zoom' : 'https://luc.to/genai-day2zoom');
+    const link = dayConfig?.link || (isDay1 ? 'https://luc.to/genai-sat-zoom-wp-even' : 'https://luc.to/genai-day2zoom');
 
     return (
         <div style={responsiveCardStyle}>

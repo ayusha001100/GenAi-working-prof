@@ -27,10 +27,10 @@ export default function SessionAdminPage() {
         day1: {
             title: 'Fundamentals',
             time: '11:00 AM onwards',
-            link: 'https://luc.to/genai-day1zoom',
+            link: 'https://luc.to/genai-sat-zoom-wp-even',
             mentor: {
-                name: 'Saikiran Sondatkar',
-                title: 'CEO and Founder at LetsUpgrade'
+                name: 'Kshitiz Agarwal',
+                title: 'SDE at HCL Software'
             },
             active: true
         },
@@ -39,8 +39,8 @@ export default function SessionAdminPage() {
             time: '11:00 AM onwards',
             link: 'https://luc.to/genai-day2zoom',
             mentor: {
-                name: 'Kshitiz Agarwal',
-                title: 'SDE at HCL Software'
+                name: 'Amit Joshi',
+                title: 'Expert Mentor'
             },
             active: true
         }
